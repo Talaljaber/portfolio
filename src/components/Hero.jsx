@@ -7,7 +7,7 @@ import { siteConfig } from '../content/site'
 import { cn } from '../lib/utils'
 import cvFile from '../assets/talal.pdf'
 const Hero = () => {
-  const { name, title, location, shortBio, socials } = siteConfig
+  const { name, handle, title, location, shortBio, socials } = siteConfig
 
   return (
     <section id="main-content" className="relative min-h-screen flex items-center overflow-hidden">
@@ -28,6 +28,11 @@ const Hero = () => {
               <div className="w-2 h-2 rounded-full bg-[var(--primary)] animate-pulse" />
               <span className="text-sm text-[var(--muted)]">Available for freelance</span>
             </div>
+            {handle && (
+              <span className="ml-4 text-sm font-semibold tracking-wide text-[var(--primary)]">
+                {handle}
+              </span>
+            )}
           </motion.div>
 
           {/* Main Heading */}

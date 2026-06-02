@@ -71,7 +71,7 @@ export const projects = [
     status: 'Completed',
     year: '2026',
     role: 'ML & Full-Stack Developer',
-    link: 'https://github.com/Tello24jaber',
+    link: 'https://github.com/talaljaber',
     featured: true,
     priority: 5
   },
@@ -86,7 +86,7 @@ export const projects = [
     status: 'Completed',
     year: 'Dec 2025',
     role: 'Developer',
-    link: 'https://github.com/Tello24jaber',
+    link: 'https://github.com/talaljaber',
     featured: true,
     priority: 6
   },
