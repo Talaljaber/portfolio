@@ -1,31 +1,40 @@
 import React from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 
-import Navbar from './components/Navbar'
-import Footer from './components/Footer'
-import Home from './routes/Home'
-import Projects from './routes/Projects'
+import BookShell from './components/book/BookShell'
 import ProjectDetail from './routes/ProjectDetail'
-import About from './routes/About'
-import Services from './routes/Services'
-import Contact from './routes/Contact'
-import Achievements from './routes/Achievements'
 
+/**
+ * The book is the site. The old section routes are kept as redirects into the
+ * matching chapter so existing links and bookmarks still resolve, and the
+ * project-detail route stays a page of its own.
+ */
 function App() {
   return (
-    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] overflow-x-hidden">
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/projects" element={<Projects />} />
-        <Route path="/projects/:id" element={<ProjectDetail />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/services" element={<Services />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/achievements" element={<Achievements />} />
-      </Routes>
-      <Footer />
-    </div>
+    <Routes>
+      <Route path="/" element={<BookShell />} />
+      <Route path="/projects/:id" element={<ProjectDetail />} />
+
+      <Route path="/about" element={<Navigate to={{ pathname: '/', hash: '#about' }} replace />} />
+      <Route
+        path="/projects"
+        element={<Navigate to={{ pathname: '/', hash: '#projects' }} replace />}
+      />
+      <Route
+        path="/services"
+        element={<Navigate to={{ pathname: '/', hash: '#services' }} replace />}
+      />
+      <Route
+        path="/achievements"
+        element={<Navigate to={{ pathname: '/', hash: '#achievements' }} replace />}
+      />
+      <Route
+        path="/contact"
+        element={<Navigate to={{ pathname: '/', hash: '#contact' }} replace />}
+      />
+
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   )
 }
 

@@ -333,11 +333,6 @@ export function getFeaturedServices(limit = 4) {
   return services.slice(0, limit)
 }
 
-export function getServicesByCategory(category) {
-  // Could add categories if needed in the future
-  return services
-}
-
 export function getServiceTechnologies() {
   const allTech = services.reduce((tech, service) => {
     return tech.concat(service.technologies)

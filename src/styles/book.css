@@ -1,0 +1,1263 @@
+/* ==========================================================================
+   Design tokens — single source of truth for the book.
+   Tailwind maps its colour/typography scales onto these variables, so there
+   is only ever one system in play.
+   ========================================================================== */
+
+:root {
+  /* --- Surfaces ------------------------------------------------------- */
+  --bg: #120e09; /* the room around the book */
+  --bg-deep: #090603;
+  --surface: #1e1710;
+
+  /* Aged laid paper: warm in the middle, tanned toward the edges. */
+  --paper: #f0e7d0; /* recto */
+  --paper-verso: #ebe1c7; /* verso, handled a little more */
+  --paper-lit: #fbf6e6; /* where the light falls */
+  --paper-deep: #bda276; /* the tanned trim */
+  --paper-edge: #f7f0dc;
+
+  --dark-paper: #241c11;
+  --dark-paper-ink: #e9dcbc;
+
+  /* --- Ink: iron gall, browned with age ------------------------------- */
+  --ink: #2b1d0d;
+  --text: var(--ink);
+  --muted: #574023;
+  --faint: #79613a;
+
+  /* --- Accent: sealing-wax red ---------------------------------------- */
+  --accent: #8e2f18;
+  --accent-strong: #6b2413;
+  --accent-wash: rgba(138, 53, 32, 0.1);
+  --gold: #a8823f;
+
+  --primary: var(--accent);
+  --primary-600: var(--accent-strong);
+  --ring: var(--accent);
+  --focus: #a4442c;
+
+  /* --- Rules and borders ---------------------------------------------- */
+  --rule: #b09468;
+  --rule-strong: #8d7241;
+  --border: rgba(43, 29, 13, 0.26);
+
+  /* --- Cover: worn leather boards ------------------------------------- */
+  --cover-cloth: #3a2517;
+  --cover-cloth-deep: #1f1209;
+  --cover-ink: #e2cda2;
+
+  /* --- Shadows -------------------------------------------------------- */
+  --spine-shadow: rgba(58, 38, 12, 0.44);
+  --book-shadow: 0 2px 6px rgba(0, 0, 0, 0.4), 0 22px 50px -12px rgba(0, 0, 0, 0.62),
+    0 48px 90px -30px rgba(0, 0, 0, 0.6);
+  --turn-shadow: rgba(34, 22, 8, 0.55);
+  --edge-highlight: rgba(255, 246, 224, 0.55);
+
+  /* --- Typography ----------------------------------------------------- */
+  --font-book: 'EB Garamond', Georgia, 'Times New Roman', serif;
+  --font-ui: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', 'Menlo', monospace;
+
+  /* --- Page geometry -------------------------------------------------- */
+  --book-max-w: 1480px;
+  --book-w: 88vw;
+  --book-h: 84svh;
+  --page-radius: 5px;
+  --page-pad-y: clamp(1.5rem, 3.2vh, 3rem);
+  --page-pad-outer: clamp(1.6rem, 3.4vw, 3.6rem);
+  --page-pad-inner: clamp(1.4rem, 2.8vw, 2.9rem);
+
+  /* Vertical rhythm. A page cannot scroll, so the spacing in dense lists has
+     to give way on short viewports the same way the type does. */
+  --lead-1: clamp(0.25rem, 0.85vh, 0.5rem);
+  --lead-2: clamp(0.4rem, 1.5vh, 0.9rem);
+  --lead-3: clamp(0.6rem, 2.3vh, 1.5rem);
+  --lead-4: clamp(0.9rem, 3.4vh, 2.25rem);
+
+  /* --- Motion --------------------------------------------------------- */
+  --turn-duration: 760ms;
+  --turn-ease: cubic-bezier(0.38, 0.02, 0.13, 1);
+
+  /* --- Texture -------------------------------------------------------- */
+  --grain-opacity: 0.09; /* fibre and foxing */
+  --mottle-opacity: 0.26; /* age staining, masked toward the edges */
+  --grain-opacity-dark: 0.07;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--bg-deep);
+}
+
+body {
+  font-family: var(--font-book);
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-variant-numeric: oldstyle-nums proportional-nums;
+  overflow-x: hidden;
+}
+
+/* The book route is the viewport: nothing scrolls, the wheel turns pages.
+   Other routes (a project entry) scroll normally. */
+body[data-book] {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--paper);
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.skip-link {
+  position: absolute;
+  top: -60px;
+  left: 12px;
+  z-index: 9999;
+  background: var(--paper);
+  color: var(--ink);
+  padding: 10px 16px;
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  border-radius: 3px;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 12px;
+}
+
+::-webkit-scrollbar {
+  width: 9px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-deep);
+}
+::-webkit-scrollbar-thumb {
+  background: #4a3b2c;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* ==========================================================================
+   Paper texture
+
+   Two tiled turbulence layers, each rendered once and reused by every page:
+   a fine one for the fibre of the sheet, and a coarse low-frequency one,
+   tinted brown, for the way old paper stains in clouds rather than evenly.
+   ========================================================================== */
+
+/* Fibre and foxing: fine enough that the tile never reads as a repeat. */
+.paper-grain {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: var(--grain-opacity);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.14' numOctaves='2' seed='4' stitchTiles='stitch'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='discrete' tableValues='0 0 0 0 0 0 0 0 0 0 0 0.6'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23f)'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 300px 300px, 160px 160px;
+}
+
+/* Age staining. Stretched to the page rather than tiled, so no repeat is
+   possible, and masked away from the middle so the text block stays clean —
+   which is how a well-kept old book actually ages: at the edges first. */
+.paper-stain {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: var(--mottle-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.008' numOctaves='4' seed='9'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.62  0.22 0 0 0 0.52  0.10 0 0 0 0.36  0 0 0 0 1'/%3E%3C/filter%3E%3Crect width='600' height='600' filter='url(%23m)'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  -webkit-mask-image: radial-gradient(72% 64% at 50% 44%, transparent 8%, rgba(0, 0, 0, 0.4) 58%, #000 100%);
+  mask-image: radial-gradient(72% 64% at 50% 44%, transparent 8%, rgba(0, 0, 0, 0.4) 58%, #000 100%);
+}
+
+/* the verso is stained from the other side */
+.page[data-side='left'] > .paper-stain {
+  transform: scaleX(-1);
+}
+
+[data-tone='dark'] > .paper-grain {
+  opacity: var(--grain-opacity-dark);
+  mix-blend-mode: screen;
+}
+
+.page-chrome,
+.page-body {
+  position: relative;
+  z-index: 2;
+}
+
+/* Fit-to-page: the inner block lays out at full height and is scaled down
+   only when the window is too short to show it. */
+.fit-outer {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.fit-inner {
+  transform-origin: top left;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* ==========================================================================
+   The stage
+   ========================================================================== */
+
+.book-stage {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.book-stage::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  /* one warm lamp, off to the upper left, as in an old photograph */
+  background: radial-gradient(
+    68% 62% at 44% 40%,
+    rgba(232, 190, 126, 0.2) 0%,
+    rgba(214, 170, 108, 0.07) 44%,
+    transparent 74%
+  );
+  pointer-events: none;
+}
+
+.book-perspective {
+  perspective: 2800px;
+  perspective-origin: 50% 46%;
+  width: min(var(--book-w), var(--book-max-w));
+  height: min(var(--book-h), 940px);
+  position: relative;
+}
+
+/* Single-page view: the block of read pages on the left, the page being read
+   on the right. A turned leaf hinges on the join between them. */
+.mobile-book {
+  --stack-w: clamp(16px, 5.5vw, 34px);
+  position: relative;
+  perspective: 1700px;
+  perspective-origin: 26% 50%;
+  width: min(94vw, 560px);
+  height: min(86svh, 820px);
+}
+
+.mobile-stack {
+  position: absolute;
+  top: 1.4%;
+  bottom: 1.4%;
+  left: 0;
+  width: var(--stack-w);
+  border-radius: var(--page-radius) 0 0 var(--page-radius);
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(90deg, rgba(94, 70, 34, 0.26) 0 1px, transparent 1px 4px),
+    linear-gradient(90deg, #a2865a 0%, #ddcaa4 22%, #cdb98f 58%, #ab8f5d 100%);
+  box-shadow:
+    inset -7px 0 11px -7px rgba(40, 26, 8, 0.66),
+    -2px 3px 10px -3px rgba(0, 0, 0, 0.5);
+}
+
+.mobile-slot {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--stack-w);
+  right: 0;
+}
+
+/* ==========================================================================
+   The book
+   ========================================================================== */
+
+.book {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  box-shadow: var(--book-shadow);
+  border-radius: var(--page-radius);
+}
+
+/* stacked leaf edges peeking out beneath the active spread */
+.book-block {
+  position: absolute;
+  border-radius: var(--page-radius);
+  pointer-events: none;
+  background: linear-gradient(90deg, #a98d5e 0%, #ddcaa2 18%, #cbb488 52%, #a68a58 100%);
+}
+
+/* Deliberately flat: the two static pages render as a single plane at z = 0 so
+   the turning leaf (lifted on Z) always sorts above them. */
+.book-pages {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-radius: var(--page-radius);
+}
+
+/* --- A single page --------------------------------------------------- */
+
+.page {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--paper);
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  container-type: inline-size;
+}
+
+/* Aged sheet: light pools where the page is open flattest, and the tone
+   deepens toward the trimmed edges and corners the way handled paper does.
+   The two facing pages are stained differently so the spread never mirrors. */
+.page[data-side='left'] {
+  background-color: var(--paper-verso);
+  background-image:
+    radial-gradient(128% 118% at 56% 44%, transparent 38%, rgba(104, 70, 24, 0.24) 100%),
+    radial-gradient(40% 32% at 10% 16%, rgba(126, 88, 34, 0.2), transparent 72%),
+    radial-gradient(30% 26% at 22% 88%, rgba(126, 88, 34, 0.16), transparent 74%),
+    radial-gradient(24% 20% at 74% 62%, rgba(140, 100, 40, 0.12), transparent 76%),
+    radial-gradient(78% 66% at 52% 40%, var(--paper-lit), transparent 70%);
+  border-radius: var(--page-radius) 0 0 var(--page-radius);
+  padding: var(--page-pad-y) var(--page-pad-inner) var(--page-pad-y) var(--page-pad-outer);
+}
+
+.page[data-side='right'],
+.mobile-page:not(.cover-cloth) {
+  background-color: var(--paper);
+  background-image:
+    radial-gradient(128% 118% at 44% 44%, transparent 38%, rgba(104, 70, 24, 0.22) 100%),
+    radial-gradient(38% 30% at 88% 20%, rgba(126, 88, 34, 0.19), transparent 72%),
+    radial-gradient(32% 26% at 78% 86%, rgba(126, 88, 34, 0.15), transparent 74%),
+    radial-gradient(22% 18% at 26% 58%, rgba(140, 100, 40, 0.11), transparent 76%),
+    radial-gradient(78% 66% at 48% 40%, var(--paper-lit), transparent 70%);
+  border-radius: 0 var(--page-radius) var(--page-radius) 0;
+  padding: var(--page-pad-y) var(--page-pad-outer) var(--page-pad-y) var(--page-pad-inner);
+}
+
+.mobile-page:not(.cover-cloth) {
+  border-radius: var(--page-radius);
+  padding: 0;
+}
+
+.page[data-tone='dark'],
+.mobile-page[data-tone='dark'] {
+  background: var(--dark-paper);
+  color: var(--dark-paper-ink);
+  --ink: var(--dark-paper-ink);
+  --muted: #a1907a;
+  --faint: #7d6f5c;
+  --rule: rgba(236, 226, 206, 0.24);
+  --rule-strong: rgba(236, 226, 206, 0.4);
+  --accent: #c9705f;
+  --accent-wash: rgba(201, 112, 95, 0.14);
+  --border: rgba(236, 226, 206, 0.16);
+}
+
+/* gutter shading — the page curving down into the binding */
+.page[data-side='left']::before,
+.page[data-side='right']::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 9%;
+  max-width: 74px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.page[data-side='left']::before {
+  right: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(90, 70, 44, 0.05) 55%, var(--spine-shadow) 100%);
+}
+
+.page[data-side='right']::before {
+  left: 0;
+  background: linear-gradient(270deg, transparent 0%, rgba(90, 70, 44, 0.05) 55%, var(--spine-shadow) 100%);
+}
+
+/* thin bright edge on the outer trim */
+.page[data-side='left']::after,
+.page[data-side='right']::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    var(--edge-highlight) 18%,
+    var(--edge-highlight) 82%,
+    transparent
+  );
+}
+
+.page[data-side='left']::after {
+  left: 0;
+}
+
+.page[data-side='right']::after {
+  right: 0;
+}
+
+.page[data-tone='dark']::after {
+  opacity: 0.18;
+}
+
+.book-spine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 26px;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 5;
+  background: linear-gradient(
+    90deg,
+    rgba(70, 52, 32, 0) 0%,
+    rgba(70, 52, 32, 0.16) 34%,
+    rgba(46, 33, 20, 0.3) 50%,
+    rgba(70, 52, 32, 0.16) 66%,
+    rgba(70, 52, 32, 0) 100%
+  );
+}
+
+.book-spine::after {
+  content: '';
+  position: absolute;
+  top: 4%;
+  bottom: 4%;
+  left: 50%;
+  width: 1px;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, transparent, rgba(38, 26, 14, 0.45), transparent);
+}
+
+/* ==========================================================================
+   The turning leaf
+   ========================================================================== */
+
+.leaf {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transform-origin: left center;
+  will-change: transform;
+  z-index: 20;
+  pointer-events: none;
+}
+
+/* In the single-page view the leaf occupies the page slot and hinges where
+   the slot meets the block of read pages. */
+.leaf--single {
+  left: var(--stack-w);
+  right: 0;
+  width: auto;
+}
+
+.leaf__face {
+  position: absolute;
+  inset: 0;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  overflow: hidden;
+}
+
+/* A page is a grid item in the static spread, so it stretches to the cell.
+   On a leaf face it is an ordinary block child and would otherwise collapse
+   to its content height — turning only part of the sheet. */
+.leaf__face > .page,
+.leaf__face > .mobile-page {
+  width: 100%;
+  height: 100%;
+}
+
+.leaf__face--back {
+  transform: rotateY(180deg);
+}
+
+/* Fold shading. The binding is the leaf's own left edge, which the mirrored
+   back face sees as its right edge. */
+.leaf__fold {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+}
+
+.leaf__fold--front {
+  background: linear-gradient(
+    90deg,
+    rgba(28, 19, 10, 0.85) 0%,
+    rgba(38, 26, 14, 0.34) 26%,
+    transparent 62%
+  );
+}
+
+.leaf__fold--back {
+  background: linear-gradient(
+    270deg,
+    rgba(28, 19, 10, 0.85) 0%,
+    rgba(38, 26, 14, 0.34) 26%,
+    transparent 62%
+  );
+}
+
+/* specular band sweeping out from the binding as the sheet passes upright */
+.leaf__gloss {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  pointer-events: none;
+  background-image: linear-gradient(
+    102deg,
+    transparent 0%,
+    rgba(255, 251, 240, 0.75) 46%,
+    rgba(255, 251, 240, 0.9) 50%,
+    rgba(255, 251, 240, 0.75) 54%,
+    transparent 100%
+  );
+  background-size: 230% 100%;
+  background-repeat: no-repeat;
+  mix-blend-mode: screen;
+}
+
+/* paper thickness along the free edge */
+.leaf__edge {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  z-index: 8;
+  pointer-events: none;
+}
+
+.leaf__edge--front {
+  right: 0;
+  background: linear-gradient(90deg, rgba(255, 252, 244, 0.9), rgba(150, 128, 96, 0.55));
+}
+
+.leaf__edge--back {
+  left: 0;
+  background: linear-gradient(270deg, rgba(255, 252, 244, 0.9), rgba(150, 128, 96, 0.55));
+}
+
+/* shadow the leaf throws onto the page beneath it */
+.leaf-cast {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 10;
+  pointer-events: none;
+  will-change: opacity, transform;
+}
+
+.leaf-cast--right {
+  right: 0;
+  width: 50%;
+  transform-origin: left center;
+}
+
+.leaf-cast--left {
+  left: 0;
+  width: 50%;
+  transform-origin: right center;
+}
+
+.leaf-cast--single {
+  left: var(--stack-w);
+  right: 0;
+  width: auto;
+  transform-origin: left center;
+}
+
+.leaf-cast__near,
+.leaf-cast__far {
+  position: absolute;
+  inset: 0;
+}
+
+.leaf-cast--right .leaf-cast__near,
+.leaf-cast--single .leaf-cast__near {
+  background: linear-gradient(
+    90deg,
+    var(--turn-shadow) 0%,
+    rgba(30, 22, 14, 0.14) 58%,
+    transparent 94%
+  );
+}
+
+.leaf-cast--left .leaf-cast__far {
+  background: linear-gradient(
+    270deg,
+    var(--turn-shadow) 0%,
+    rgba(30, 22, 14, 0.14) 58%,
+    transparent 94%
+  );
+}
+
+/* ==========================================================================
+   Editorial primitives
+   ========================================================================== */
+
+.u-kicker {
+  font-family: var(--font-ui);
+  font-size: clamp(0.7rem, min(1.6cqi, 1.28vh), 0.86rem);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.u-mono {
+  font-family: var(--font-mono);
+  font-size: clamp(0.72rem, min(1.5cqi, 1.2vh), 0.88rem);
+  letter-spacing: 0.04em;
+  color: var(--faint);
+}
+
+/* --- The reading roles -------------------------------------------------
+   Prose stays in Garamond, which is what makes it a book. Everything that is
+   scanned rather than read — list items, notes, metadata — is set in Inter,
+   because at these sizes a screen renders it far more clearly.
+   ----------------------------------------------------------------------- */
+
+/* the one-line standfirst under a page title */
+.u-lede {
+  font-family: var(--font-book);
+  font-size: clamp(1.16rem, min(3cqi, 2.3vh), 1.5rem);
+  line-height: 1.4;
+  font-style: italic;
+  color: var(--muted);
+}
+
+/* the name of a thing in a list */
+.u-item-title {
+  font-family: var(--font-book);
+  font-size: clamp(1.1rem, min(2.75cqi, 2.15vh), 1.42rem);
+  line-height: 1.22;
+  color: var(--ink);
+}
+
+/* the organisation under a role */
+.u-org {
+  font-family: var(--font-book);
+  font-size: clamp(1rem, min(2.4cqi, 1.9vh), 1.2rem);
+  font-style: italic;
+  color: var(--accent);
+}
+
+/* supporting text: descriptions, notes, skill runs */
+.u-note {
+  font-family: var(--font-ui);
+  font-size: clamp(0.85rem, min(1.95cqi, 1.55vh), 1.02rem);
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.u-group-label {
+  font-family: var(--font-ui);
+  font-size: clamp(0.68rem, min(1.5cqi, 1.2vh), 0.82rem);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.3rem;
+}
+
+.u-display {
+  font-family: var(--font-book);
+  font-weight: 500;
+  line-height: 1.03;
+  letter-spacing: -0.014em;
+  text-wrap: balance;
+}
+
+.u-body {
+  font-family: var(--font-book);
+  font-size: clamp(0.97rem, min(2.5cqi, 1.95vh), 1.32rem);
+  line-height: 1.55;
+  color: var(--ink);
+  max-width: 66ch;
+  hyphens: auto;
+}
+
+.u-body--muted {
+  color: var(--muted);
+}
+
+.u-smallcaps {
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.11em;
+}
+
+.u-numeral {
+  font-family: var(--font-book);
+  font-variant-numeric: lining-nums;
+  color: var(--accent);
+}
+
+.u-rule {
+  border: 0;
+  border-top: 1px solid var(--rule);
+}
+
+.u-rule--double {
+  border: 0;
+  height: 4px;
+  border-top: 1px solid var(--rule-strong);
+  border-bottom: 1px solid var(--rule-strong);
+}
+
+.u-dropcap::first-letter {
+  float: left;
+  font-family: var(--font-book);
+  font-size: 3.2em;
+  line-height: 0.8;
+  padding: 0.08em 0.09em 0 0;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.u-link {
+  color: var(--accent);
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-repeat: no-repeat;
+  background-position: 0 92%;
+  transition: background-size 0.28s ease;
+}
+
+.u-link:hover,
+.u-link:focus-visible {
+  background-size: 100% 1px;
+}
+
+/* ==========================================================================
+   Entries — a list row that opens the detail sheet
+
+   The row itself is the button, so the whole thing is a comfortable target on
+   a phone; the "Details" label is there so it never has to be discovered.
+   ========================================================================== */
+
+.entry {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  width: 100%;
+  text-align: left;
+  padding: var(--lead-2) 0;
+  border-bottom: 1px solid var(--border);
+  transition: background-color 0.2s ease, padding-left 0.2s ease;
+}
+
+li:last-child > .entry {
+  border-bottom: 0;
+}
+
+.entry__main {
+  display: block;
+  min-width: 0;
+  flex: 1;
+}
+
+.entry__cta {
+  flex-shrink: 0;
+  font-family: var(--font-ui);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 0.3rem 0.55rem;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.entry:hover,
+.entry:focus-visible {
+  background-color: var(--accent-wash);
+  padding-left: 0.5rem;
+}
+
+.entry:hover .entry__cta,
+.entry:focus-visible .entry__cta {
+  background-color: var(--accent);
+  border-color: var(--accent);
+  color: var(--paper-lit);
+}
+
+.entry:hover .entry__title {
+  color: var(--accent);
+}
+
+/* the one-line preview of a longer entry */
+.entry__clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   The detail sheet
+   ========================================================================== */
+
+.sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  background: rgba(9, 6, 3, 0.74);
+}
+
+/* Centred with `inset: 0` + `margin: auto` rather than a translate, because the
+   open/close animation owns `transform` and would wipe the centring out. */
+.sheet {
+  position: fixed;
+  z-index: 71;
+  inset: 0;
+  margin: auto;
+  width: min(720px, 92vw);
+  height: fit-content;
+  max-height: min(88svh, 900px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--page-radius);
+  background-color: var(--paper);
+  background-image: radial-gradient(90% 70% at 50% 30%, var(--paper-lit), transparent 78%);
+  color: var(--ink);
+  box-shadow: 0 30px 90px -20px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(120, 92, 48, 0.3);
+}
+
+.sheet__head,
+.sheet__body,
+.sheet__foot {
+  position: relative;
+  z-index: 2;
+  padding: 0 clamp(1.3rem, 3.4vw, 2.4rem);
+}
+
+.sheet__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding-top: clamp(1.3rem, 3vw, 2rem);
+  padding-bottom: clamp(1rem, 2.2vw, 1.4rem);
+  border-bottom: 1px solid var(--rule);
+}
+
+.sheet__body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-top: clamp(1.1rem, 2.4vw, 1.6rem);
+  padding-bottom: clamp(1.1rem, 2.4vw, 1.6rem);
+}
+
+.sheet__foot {
+  padding-bottom: clamp(1.3rem, 3vw, 2rem);
+}
+
+.sheet__close {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--muted);
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.sheet__close:hover {
+  color: var(--paper-lit);
+  background-color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ==========================================================================
+   Cover cloth
+   ========================================================================== */
+
+.page.cover-cloth,
+.mobile-page.cover-cloth {
+  background:
+    radial-gradient(110% 85% at 34% 16%, rgba(255, 214, 150, 0.1), transparent 62%),
+    radial-gradient(130% 120% at 50% 50%, transparent 40%, rgba(0, 0, 0, 0.42) 100%),
+    linear-gradient(158deg, var(--cover-cloth) 0%, var(--cover-cloth-deep) 100%);
+  color: var(--cover-ink);
+  --ink: var(--cover-ink);
+  --muted: #9c8a6d;
+  --faint: #7a6a52;
+  --rule: rgba(230, 216, 191, 0.26);
+  --rule-strong: rgba(230, 216, 191, 0.42);
+  --border: rgba(230, 216, 191, 0.18);
+  --accent: var(--gold);
+}
+
+/* Grained leather rather than woven cloth: irregular, not a regular weave. */
+.cloth-weave {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.42;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='l'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42 0.62' numOctaves='4' seed='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23l)'/%3E%3C/svg%3E");
+  background-size: 220px 220px;
+}
+
+.cover-foil {
+  color: var(--gold);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.45);
+}
+
+/* ==========================================================================
+   Chrome — the one control that lives outside the pages
+   ========================================================================== */
+
+.book-chrome {
+  --chrome-ink: #dccdb4;
+  --chrome-muted: #8d7e67;
+  --chrome-accent: #cf8270;
+  font-family: var(--font-ui);
+  color: var(--chrome-muted);
+}
+
+.chrome-icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1px solid rgba(220, 205, 180, 0.22);
+  color: var(--chrome-muted);
+  padding: 0.44rem 0.9rem;
+  font-size: 0.64rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.chrome-icon-button:hover:not(:disabled) {
+  color: var(--chrome-ink);
+  border-color: rgba(220, 205, 180, 0.5);
+}
+
+.chrome-icon-button:disabled {
+  opacity: 0.32;
+  cursor: not-allowed;
+}
+
+/* ==========================================================================
+   Ribbon bookmarks down the fore-edge
+   ========================================================================== */
+
+.book-marks {
+  position: absolute;
+  top: 3%;
+  bottom: 3%;
+  right: calc(-1 * var(--mark-w));
+  z-index: 35;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  --mark-w: clamp(30px, 3.4vw, 44px);
+}
+
+/* The tabs share the height of the block, so adding a chapter shortens them
+   all rather than running one off the bottom of the book. */
+.book-mark {
+  position: relative;
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+  width: var(--mark-w);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 5px 3px 7px;
+  border-radius: 0 4px 4px 0;
+  font-family: var(--font-ui);
+  color: #e8d9b8;
+  background: linear-gradient(180deg, #7c2a17 0%, #61200f 100%);
+  box-shadow: 3px 3px 10px -2px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 226, 180, 0.16);
+  transform: translateX(-8px);
+  transition: transform 0.24s cubic-bezier(0.38, 0.02, 0.13, 1), filter 0.24s ease;
+}
+
+/* the notched tail of a ribbon */
+.book-mark::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -7px;
+  height: 8px;
+  background: inherit;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 55%, 0 100%);
+}
+
+.book-mark:hover,
+.book-mark:focus-visible {
+  transform: translateX(0);
+  filter: brightness(1.12);
+}
+
+.book-mark[data-active='true'] {
+  transform: translateX(2px);
+  background: linear-gradient(180deg, #a8823f 0%, #8a6730 100%);
+  color: #241708;
+}
+
+.book-mark__numeral {
+  flex-shrink: 0;
+  font-family: var(--font-book);
+  font-variant-numeric: lining-nums;
+  font-size: 0.7rem;
+  line-height: 1;
+  opacity: 0.9;
+}
+
+.book-mark__label {
+  writing-mode: vertical-rl;
+  font-size: 0.52rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* On a single page the tabs ride the outer edge of the sheet. */
+/* On a phone there is no margin beside the sheet, so the tabs ride the outer
+   edge of the page itself rather than hanging off the book. */
+.mobile-book .book-marks {
+  top: 5%;
+  bottom: 5%;
+  right: calc(-1 * var(--mark-w) + 18px);
+  gap: 6px;
+  --mark-w: clamp(26px, 7vw, 36px);
+}
+
+.mobile-book .book-mark {
+  padding: 6px 2px 8px;
+}
+
+.mobile-book .book-mark__label {
+  font-size: 0.48rem;
+  letter-spacing: 0.08em;
+}
+
+/* Keep the text clear of the tabs, which sit over the page's outer edge. */
+.mobile-book .mobile-page__chrome,
+.mobile-book .mobile-page__body {
+  padding-right: clamp(2.4rem, 12vw, 3.4rem);
+}
+
+/* invisible page-edge affordances */
+.book-edge {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: clamp(44px, 6vw, 90px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--chrome-muted);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  z-index: 30;
+}
+
+.book-edge:hover,
+.book-edge:focus-visible {
+  opacity: 1;
+}
+
+.book-edge--prev {
+  left: calc(-1 * clamp(44px, 6vw, 90px));
+}
+
+.book-edge--next {
+  right: calc(-1 * clamp(44px, 6vw, 90px));
+}
+
+.book-edge:disabled {
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   Contents drawer
+   ========================================================================== */
+
+.contents-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 7, 5, 0.66);
+  z-index: 60;
+}
+
+.contents-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(440px, 92vw);
+  z-index: 61;
+  background: var(--paper);
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  box-shadow: -18px 0 60px rgba(0, 0, 0, 0.5);
+}
+
+/* ==========================================================================
+   Single-page view
+   ========================================================================== */
+
+.mobile-page {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  color: var(--ink);
+  border-radius: var(--page-radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--book-shadow);
+  container-type: inline-size;
+}
+
+/* the bound edge */
+.mobile-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 16px;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(90deg, var(--spine-shadow), transparent);
+}
+
+.mobile-page__chrome {
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem clamp(1.1rem, 5vw, 1.8rem);
+  padding-left: calc(clamp(1.1rem, 5vw, 1.8rem) + 10px);
+}
+
+.mobile-page__chrome--head {
+  border-bottom: 1px solid var(--rule);
+}
+
+/* A page holds exactly one page of content — it never scrolls. */
+.mobile-page__body {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(1rem, 3.5vw, 1.5rem) clamp(1.1rem, 5vw, 1.8rem);
+  padding-left: calc(clamp(1.1rem, 5vw, 1.8rem) + 10px);
+}
+
+/* On a standalone route the article scrolls with the document instead. */
+.mobile-page--flow {
+  height: auto;
+  box-shadow: var(--book-shadow);
+}
+
+.mobile-page--flow .mobile-page__body {
+  overflow: visible;
+  display: block;
+}
+
+/* ==========================================================================
+   Reduced motion
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .leaf,
+  .leaf-cast {
+    display: none !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

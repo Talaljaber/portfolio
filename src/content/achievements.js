@@ -1,48 +1,53 @@
+// Competitions, achievements and press. Transcribed verbatim from the CV.
+
 export const achievements = [
   {
     id: 'falling-walls-berlin-2025',
     title: 'Speaker & Finalist – Falling Walls Breakthrough of the Year',
     organization: 'Falling Walls Foundation, Berlin',
     date: '2025',
-    description: 'Recognized as one of the top 100 global innovators selected from 2,750+ applicants across 60 countries. Pitched DineLink alongside international professors, PhD holders, and researchers as the youngest finalist.',
-    link: 'https://www.gju.edu.jo/news/german-jordanian-university-shines-its-student-wins-global-innovation-competition-20552',
-    icon: 'Trophy',
+    description:
+      'Recognized as one of the top 100 global innovators selected from 2,750+ applicants across 60 countries. The youngest finalist at the Falling Walls Finals, pitching the DineLink startup alongside international professors, PhD holders, and researchers.',
+    link: 'https://youtu.be/W_XHHXGQXUU?si=kkI77aUbOK--qNJf',
+    linkLabel: 'Watch the pitch',
     type: 'award',
-    featured: true
+    featured: true,
   },
   {
     id: 'falling-walls-jordan-2025',
     title: 'Winner – Falling Walls Lab Jordan 2025',
-    organization: 'DAAD / Falling Walls',
+    organization: 'DAAD / TTi',
     date: '2025',
-    description: 'Secured 1st place nationally among 50+ competing innovators to represent Jordan on the global stage in Berlin.',
-    link: 'https://www.gju.edu.jo/news/german-jordanian-university-shines-its-student-wins-global-innovation-competition-20552',
-    icon: 'Trophy',
+    description:
+      'Secured 1st place nationally to represent Jordan on the global stage in Berlin.',
+    link: 'https://tti-jo.org/tti-empowers-innovators-at-falling-walls-lab-jordan',
+    linkLabel: 'Read the announcement',
     type: 'award',
-    featured: true
+    featured: true,
   },
   {
     id: 'falling-walls-ambassador',
     title: 'Ambassador – Jordan',
     organization: 'Falling Walls Foundation',
     date: 'Apr 2026',
-    description: 'Selected to serve as Falling Walls Foundation Ambassador in Jordan, supporting events at GJU and Birzeit University. Invited to speak at Amman and Ramallah events.',
+    description:
+      'Invited to speak during the Amman and Ramallah events, sharing personal experience as a previous Falling Walls winner and global finalist.',
     link: null,
-    icon: 'Flag',
     type: 'recognition',
-    featured: true
+    featured: true,
   },
   {
     id: 'arab-youth-conference',
-    title: 'Speaker – Eighth Arab Youth Conference',
+    title: 'Speaker & University Representative – Eighth Arab Youth Conference',
     organization: 'Arab Youth Conference',
     date: '2025',
-    description: 'Nominated to present the success story of DineLink and its international competition victory as University Representative.',
+    description:
+      'Nominated to present the success story of the DineLink startup and its international competition victory.',
     link: null,
-    icon: 'Mic',
     type: 'recognition',
-    featured: true
+    featured: true,
   },
+
   {
     id: 'business-game-tti',
     title: 'Winner – The Business Game',
@@ -50,63 +55,148 @@ export const achievements = [
     date: '2025',
     description: 'Received mentorship program with Ecoventure.',
     link: null,
-    icon: 'Trophy',
     type: 'award',
-    featured: false
+    featured: false,
   },
   {
     id: 'national-tech-parade',
     title: 'Finalist – National Technology Parade',
     organization: 'HTU',
     date: '2025',
-    description: 'Reached the finals of the National Technology Parade competition.',
+    description: null,
     link: null,
-    icon: 'Star',
     type: 'competition',
-    featured: false
+    featured: false,
   },
   {
     id: 'queen-rania-competition',
     title: 'Finalist – Queen Rania National Entrepreneurship Competition',
-    organization: 'PSUT / QRCE',
+    organization: 'PSUT',
     date: '2025',
-    description: 'Completed 49 hours of mentorship training with QRCE as a national finalist.',
+    description: 'Completed 49 hours of mentorship training with QRCE.',
     link: null,
-    icon: 'Star',
     type: 'competition',
-    featured: false
+    featured: false,
   },
   {
     id: 'gju-3030',
     title: 'Finalist – GJU 3030 Innovation Competition',
     organization: 'German Jordanian University',
     date: '2025',
-    description: 'Selected as a finalist in GJU\'s premier innovation competition.',
+    description: null,
     link: null,
-    icon: 'Lightbulb',
     type: 'competition',
-    featured: false
+    featured: false,
+  },
+  {
+    id: 'database-hero',
+    title: 'Participant – Database Hero',
+    organization: 'HTU',
+    date: '2025',
+    description: null,
+    link: null,
+    type: 'competition',
+    featured: false,
+  },
+  {
+    id: 'ai-innovators',
+    title: 'Participant – AI Innovators Hackathon',
+    organization: 'UOP',
+    date: '2025',
+    description: null,
+    link: null,
+    type: 'competition',
+    featured: false,
+  },
+  {
+    id: 'app-dev-hackathon',
+    title: 'Participant – Application Development Hackathon',
+    organization: 'GJU',
+    date: '2025',
+    description: null,
+    link: null,
+    type: 'competition',
+    featured: false,
   },
   {
     id: 'pwc-mentorship',
-    title: 'PwC Mentorship Program Mentee',
+    title: 'PwC Mentorship Program mentee',
     organization: 'PwC',
     date: '2025',
-    description: 'Selected to participate in PwC\'s exclusive mentorship program.',
+    description: null,
     link: null,
-    icon: 'GraduationCap',
     type: 'program',
-    featured: false
+    featured: false,
+  },
+  {
+    id: 'gju-incubation',
+    title: 'GJU Incubation Program participant',
+    organization: 'German Jordanian University',
+    date: '2025',
+    description: null,
+    link: null,
+    type: 'program',
+    featured: false,
   },
   {
     id: 'cyber-warriors',
     title: 'Cyber Warriors Training',
     organization: 'NCSC',
     date: '2025',
-    description: 'Completed intensive cybersecurity training program with hands-on security techniques.',
+    description: 'Intensive cybersecurity training program.',
     link: null,
-    icon: 'Shield',
     type: 'training',
-    featured: false
-  }
+    featured: false,
+  },
+  {
+    id: 'hands-on-apex',
+    title: 'Hands on Apex – Accelerated Web Application Development',
+    organization: 'GJU',
+    date: '2025',
+    description: null,
+    link: null,
+    type: 'training',
+    featured: false,
+  },
+]
+
+/** Press coverage, with the links as given in the CV. */
+export const press = [
+  {
+    id: 'gju-feature',
+    outlet: 'German Jordanian University',
+    title:
+      'German Jordanian University shines as its student wins global innovation competition',
+    href: 'https://www.gju.edu.jo/news/german-jordanian-university-shines-its-student-wins-global-innovation-competition-20552',
+  },
+  {
+    id: 'tti-berlin',
+    outlet: 'TTi',
+    title: 'From Jordan to Berlin: Talal Jaber represents Jordan at the Falling Walls Lab Global Finals',
+    href: 'https://tti-jo.org/from-jordan-to-berlin-talal-jaber-represents-jordan-at-the-falling-walls-lab-global-finals/',
+  },
+  {
+    id: 'tti-lab',
+    outlet: 'TTi',
+    title: 'TTi empowers innovators at Falling Walls Lab Jordan',
+    href: 'https://tti-jo.org/tti-empowers-innovators-at-falling-walls-lab-jordan',
+  },
+  {
+    id: 'falling-walls-video',
+    outlet: 'Falling Walls',
+    title: 'The Berlin pitch',
+    href: 'https://youtu.be/W_XHHXGQXUU?si=kkI77aUbOK--qNJf',
+  },
+]
+
+export const certificates = [
+  { title: 'Oracle Apex', issuer: 'GJU', year: '2025' },
+  { title: 'Git & GitHub', issuer: 'GJU IT Club', year: '2025' },
+  { title: 'Front-End Development', issuer: 'GJU IT Club', year: '2025' },
+  { title: 'Object-Oriented Programming', issuer: 'GJU', year: '2024' },
+  { title: 'Code for Palestine', issuer: 'Paltel', year: '2020' },
+  { title: 'Problem Solving', issuer: 'Paltel', year: '2020' },
+  { title: 'C++ Programming', issuer: 'Paltel', year: '2020' },
+  { title: 'ICDL', issuer: 'Galaxy Academy', year: '2018' },
+  { title: 'Leadership Development', issuer: 'Bsharat Academy', year: '2018' },
 ]

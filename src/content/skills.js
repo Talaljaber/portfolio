@@ -1,204 +1,176 @@
-export const skills = [
-  // Frontend Technologies
-  {
-    name: 'HTML5',
-    level: 5,
-    category: 'Frontend',
-    keywords: ['markup', 'semantic', 'accessibility'],
-    icon: 'FileCode2',
-    description: 'Semantic markup and modern HTML5 features'
-  },
-  {
-    name: 'CSS3',
-    level: 5,
-    category: 'Frontend',
-    keywords: ['styling', 'responsive', 'animations'],
-    icon: 'Palette',
-    description: 'Advanced CSS including Grid, Flexbox, and animations'
-  },
-  {
-    name: 'JavaScript',
-    level: 5,
-    category: 'Frontend',
-    keywords: ['es6', 'async', 'dom'],
-    icon: 'Code2',
-    description: 'Modern JavaScript ES6+ and DOM manipulation'
-  },
-  {
-    name: 'React.js',
-    level: 5,
-    category: 'Frontend',
-    keywords: ['components', 'hooks', 'state'],
-    icon: 'Atom',
-    description: 'Advanced React with hooks, context, and modern patterns'
-  },
-  {
-    name: 'Next.js',
-    level: 2,
-    category: 'Frontend',
-    keywords: ['ssr', 'routing', 'optimization'],
-    icon: 'Boxes',
-    description: 'Server-side rendering and static site generation'
-  },
-  {
-    name: 'Tailwind CSS',
-    level: 5,
-    category: 'Frontend',
-    keywords: ['utility', 'responsive', 'design'],
-    icon: 'Wind',
-    description: 'Utility-first CSS framework for rapid UI development'
-  },
-  {
-    name: 'Vite',
-    level: 4,
-    category: 'Frontend',
-    keywords: ['build', 'dev-tools', 'fast'],
-    icon: 'Bolt',
-    description: 'Lightning-fast build tool for modern web projects'
-  },
+// Skill taxonomy, transcribed verbatim from the CV.
 
-  // Backend Technologies
+export const skillTiers = [
   {
-    name: 'Node.js',
-    level: 4,
-    category: 'Backend',
-    keywords: ['runtime', 'server', 'api'],
-    icon: 'Server',
-    description: 'Server-side JavaScript runtime and API development'
+    id: 'main',
+    title: 'Main Technical Focus',
+    groups: [
+      {
+        label: 'Product & System Design',
+        items: [
+          'product discovery',
+          'customer interviews',
+          'requirement analysis',
+          'MVP scoping',
+          'feature prioritization',
+          'technical roadmapping',
+          'system architecture',
+          'backend architecture',
+          'database design',
+          'relational data modeling',
+          'API design',
+          'API integration',
+          'full-stack architecture',
+        ],
+      },
+      {
+        label: 'Full-Stack Web Development',
+        items: [
+          'Next.js',
+          'React.js',
+          'TypeScript',
+          'JavaScript',
+          'Node.js',
+          'NestJS',
+          'FastAPI',
+          'REST APIs',
+          'PostgreSQL',
+          'MySQL',
+          'Supabase',
+          'authentication flows',
+          'backend validation',
+          'real-time data handling',
+          'dashboard development',
+          'responsive UI development',
+        ],
+      },
+      {
+        label: 'Developer Tools & Secure Development',
+        items: [
+          'VS Code Extension API',
+          'CLI development',
+          'TypeScript monorepos',
+          'static analysis',
+          'rule-based security detectors',
+          'secret scanning',
+          'frontend key exposure detection',
+          'secure endpoint awareness',
+          'environment-variable safety',
+          'input validation awareness',
+          'open-source workflows',
+        ],
+      },
+      {
+        label: 'AI-Assisted Engineering',
+        items: [
+          'LLMs and AI coding tools for prototyping',
+          'debugging',
+          'refactoring',
+          'documentation',
+          'architecture exploration',
+          'faster product iteration',
+        ],
+      },
+    ],
   },
   {
-    name: 'Express.js',
-    level: 4,
-    category: 'Backend',
-    keywords: ['framework', 'middleware', 'routing'],
-    icon: 'Route',
-    description: 'Fast and minimalist web framework for Node.js'
+    id: 'applied',
+    title: 'Applied Technical Knowledge',
+    groups: [
+      {
+        label: 'AI, ML & Data',
+        items: [
+          'machine learning applications',
+          'SVM classification',
+          'feature extraction',
+          'FFT analysis',
+          'filtering',
+          'window segmentation',
+          'normalization',
+          'signal processing pipelines',
+          'IMU sensor-data processing',
+          'activity recognition',
+          'MediaPipe',
+          'OpenCV',
+          'real-time landmark detection',
+        ],
+      },
+      {
+        label: 'DevOps & Deployment',
+        items: [
+          'Git/GitHub',
+          'GitHub Actions',
+          'Docker',
+          'Netlify',
+          'AWS',
+          'Hetzner',
+          'Linux',
+          'CI/CD pipeline management',
+          'production deployment workflows',
+          'npm package publishing',
+          'VS Code Marketplace publishing',
+          'Open VSX publishing',
+        ],
+      },
+      {
+        label: 'Networking & Systems',
+        items: [
+          'HTTP/HTTPS',
+          'DNS',
+          'TCP',
+          'UDP',
+          'WebSockets',
+          'foundational network architecture',
+          'Linux basics',
+          'distributed systems communication',
+        ],
+      },
+    ],
   },
   {
-    name: 'Java',
-    level: 4,
-    category: 'Backend',
-    keywords: ['oop', 'enterprise', 'robust'],
-    icon: 'Coffee',
-    description: 'Object-oriented programming and enterprise applications'
+    id: 'foundations',
+    title: 'Programming & CS Foundations',
+    groups: [
+      {
+        label: 'Languages',
+        items: ['TypeScript', 'JavaScript', 'Python', 'Java', 'C', 'C++', 'SQL', 'x86 Assembly'],
+      },
+      {
+        label: 'Fundamentals',
+        items: [
+          'Object-Oriented Programming',
+          'Data Structures',
+          'Algorithms',
+          'clean code principles',
+          'modular architecture',
+          'testing',
+          'debugging',
+          'software design patterns',
+        ],
+      },
+      {
+        label: 'Working Knowledge',
+        items: [
+          'Kubernetes basics',
+          'Vue.js',
+          'Vite',
+          'Oracle APEX',
+          'CI/CD optimization',
+          'containerization concepts',
+          'cloud infrastructure basics',
+          'cybersecurity testing fundamentals',
+          'German B1',
+        ],
+      },
+    ],
   },
-  {
-    name: 'Spring Boot',
-    level: 1,
-    category: 'Backend',
-    keywords: ['framework', 'microservices', 'java'],
-    icon: 'Leaf',
-    description: 'Java framework for building enterprise applications'
-  },
-
-  // Database Technologies
-  {
-    name: 'Supabase',
-    level: 4,
-    category: 'Database',
-    keywords: ['postgresql', 'realtime', 'auth'],
-    icon: 'Database',
-    description: 'Open-source Firebase alternative with PostgreSQL'
-  },
-  {
-    name: 'PostgreSQL',
-    level: 2,
-    category: 'Database',
-    keywords: ['relational', 'sql', 'advanced'],
-    icon: 'Cylinder',
-    description: 'Advanced relational database with powerful features'
-  },
-  {
-    name: 'SQL',
-    level: 2,
-    category: 'Database',
-    keywords: ['queries', 'joins', 'optimization'],
-    icon: 'Table2',
-    description: 'Complex queries, joins, and database optimization'
-  },
-  {
-    name: 'Google Sheets API',
-    level: 4,
-    category: 'Database',
-    keywords: ['integration', 'automation', 'data'],
-    icon: 'Sheet',
-    description: 'Integration and automation with Google Sheets'
-  },
-
-  // DevOps & Deployment
-  {
-    name: 'CI/CD',
-    level: 3,
-    category: 'DevOps',
-    keywords: ['automation', 'pipeline', 'deployment'],
-    icon: 'Workflow',
-    description: 'Continuous integration and deployment pipelines'
-  },
-  {
-    name: 'Deployment',
-    level: 4,
-    category: 'DevOps',
-    keywords: ['netlify', 'vercel', 'render'],
-    icon: 'Rocket',
-    description: 'Cloud deployment on Netlify, Vercel, and Render'
-  },
-  {
-    name: 'Git & GitHub',
-    level: 4,
-    category: 'DevOps',
-    keywords: ['version-control', 'collaboration', 'workflow'],
-    icon: 'GitBranch',
-    description: 'Version control and collaborative development workflows'
-  },
-
-  // APIs & Integration
-  {
-    name: 'REST APIs',
-    level: 4,
-    category: 'APIs',
-    keywords: ['http', 'json', 'integration'],
-    icon: 'Network',
-    description: 'RESTful API design, development, and integration'
-  },
-  {
-    name: 'Google Apps Script',
-    level: 4,
-    category: 'APIs',
-    keywords: ['automation', 'google', 'scripting'],
-    icon: 'Code',
-    description: 'Automation and custom functions for Google Workspace'
-  },
-
-  // Emerging Technologies
-  {
-    name: 'AI Integration',
-    level: 2,
-    category: 'AI/ML',
-    keywords: ['chatgpt', 'automation', 'smart'],
-    icon: 'Bot',
-    description: 'Integration of AI services for smart applications'
-  },
-  {
-    name: 'Progressive Web Apps',
-    level: 3,
-    category: 'Frontend',
-    keywords: ['pwa', 'offline', 'mobile'],
-    icon: 'Smartphone',
-    description: 'Building app-like web experiences with PWA features'
-  }
 ]
 
-// Utility functions for working with skills
-export function getSkillsByCategory(category) {
-  return skills.filter(skill => skill.category === category)
-}
+/** Flat list of every group, for the pages that do not split by tier. */
+export const skillGroups = skillTiers.flatMap((tier) => tier.groups)
 
-export function getSkillCategories() {
-  return [...new Set(skills.map(skill => skill.category))]
-}
-
-export function getTopSkills(limit = 8) {
-  return skills
-    .sort((a, b) => b.level - a.level)
-    .slice(0, limit)
-}
+export const languages = [
+  { name: 'Arabic', level: 'Native' },
+  { name: 'English', level: 'Fluent, C1 certified' },
+  { name: 'German', level: 'B1' },
+]

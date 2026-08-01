@@ -2,156 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-/* CSS Variables for Themes */
-:root {
-  /* Emerald Theme (Default) */
-  --bg: #0b0f14;
-  --surface: #0f172a;
-  --text: #e2e8f0;
-  --muted: #94a3b8;
-  --primary: #10b981;
-  --primary-600: #059669;
-  --accent: #22d3ee;
-  --ring: #34d399;
-}
-
-.dark {
-  /* Midnight Theme */
-  --bg: #030712;
-  --surface: #0b1220;
-  --text: #e5e7eb;
-  --muted: #9ca3af;
-  --primary: #60a5fa;
-  --primary-600: #3b82f6;
-  --accent: #a78bfa;
-  --ring: #60a5fa;
-}
-
-/* Base Styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  font-family: 'Inter', system-ui, sans-serif;
-  transition: background-color 0.18s ease, color 0.18s ease;
-  background: var(--bg);
-  color: var(--text);
-}
-
-/* Skip to content link for accessibility */
-.skip-link {
-  position: absolute;
-  top: -40px;
-  left: 6px;
-  background: var(--primary);
-  color: black;
-  padding: 8px;
-  border-radius: 4px;
-  text-decoration: none;
-  z-index: 9999;
-  transition: top 0.3s;
-}
-
-.skip-link:focus {
-  top: 6px;
-}
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--bg);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--primary);
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-600);
-}
-
-/* Component Utilities */
 @layer components {
+  /* Interface controls. Deliberately quiet — these are the only elements on
+     the site set in the sans face. */
   .btn-primary {
-    @apply inline-flex items-center gap-2 rounded-xl bg-[var(--primary)] px-5 py-3 text-sm font-semibold text-black hover:bg-[var(--primary-600)] focus:outline-none focus:ring-2 focus:ring-[var(--ring)] focus:ring-offset-2 focus:ring-offset-black transition-all duration-200;
+    @apply inline-flex items-center gap-2 border border-[var(--accent)] bg-[var(--accent)] px-5 py-2.5 font-ui text-[0.72rem] font-medium uppercase tracking-[0.16em] text-[var(--paper)] transition-colors duration-200 hover:bg-[var(--accent-strong)] hover:border-[var(--accent-strong)];
   }
 
   .btn-secondary {
-    @apply inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-[var(--text)] hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-[var(--ring)] focus:ring-offset-2 focus:ring-offset-black transition-all duration-200;
+    @apply inline-flex items-center gap-2 border border-[var(--rule-strong)] bg-transparent px-5 py-2.5 font-ui text-[0.72rem] font-medium uppercase tracking-[0.16em] text-[var(--ink)] transition-colors duration-200 hover:border-[var(--accent)] hover:text-[var(--accent)];
   }
 
-  .card {
-    @apply rounded-2xl border border-white/10 bg-[var(--surface)] shadow-card backdrop-blur-sm;
+  .btn-ghost {
+    @apply inline-flex items-center gap-1.5 font-ui text-[0.68rem] font-medium uppercase tracking-[0.16em] text-[var(--muted)] transition-colors duration-200 hover:text-[var(--accent)];
   }
-
-  .badge {
-    @apply rounded-lg bg-white/5 px-2.5 py-1 text-xs text-[var(--text)] ring-1 ring-white/10;
-  }
-
-  .container-custom {
-    @apply mx-auto max-w-7xl px-6 lg:px-8;
-  }
-
-  .section-padding {
-    @apply py-16 sm:py-20 lg:py-28;
-  }
-}
-
-/* Hero Background Gradient */
-.hero-gradient {
-  background: linear-gradient(135deg, var(--bg) 0%, rgba(16, 185, 129, 0.1) 50%, var(--bg) 100%);
-  animation: hero-gradient 14s ease infinite;
-}
-
-/* Shine Effect for Cards */
-.shine-effect {
-  position: relative;
-  overflow: hidden;
-}
-
-.shine-effect::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-  transform: translateX(-100%) rotate(45deg);
-  transition: transform 0.6s;
-}
-
-.shine-effect:hover::after {
-  transform: translateX(100%) rotate(45deg);
-}
-
-/* Reduced Motion Support */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-
-  html {
-    scroll-behavior: auto;
-  }
-}
-
-/* Focus styles for better accessibility */
-.focus-ring {
-  @apply focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-black focus-visible:outline-none;
 }

@@ -3,8 +3,9 @@ export const siteConfig = {
   handle: '@talaljaberr',
   title: 'Software Engineer & Full-Stack Developer',
   location: 'Jordan',
-  shortBio: 'Software Engineer & Computer Engineering student at GJU. Founder & CTO of DineLink. Top 100 global innovator at Falling Walls Foundation (Berlin) from 2,700+ applicants worldwide.',
-  fullBio: 'Software Engineer and Computer Engineering student at the German Jordanian University, specializing in end-to-end web applications. Founder & CTO of DineLink, an AI-powered restaurant management startup. Selected among the Top 100 global innovators at the Falling Walls Foundation (Berlin) from 2,700+ applicants. Front-End Lead at H20 Digital Solutions, Technical Director at GDG Amman, and Falling Walls Foundation Ambassador for Jordan.',
+  shortBio: 'Software Engineer and Computer Engineering student at the German Jordanian University, focused on full-stack product engineering, system design, and secure AI-assisted development.',
+  fullBio: 'Software Engineer and Computer Engineering student at the German Jordanian University, focused on full-stack product engineering, system design, and secure AI-assisted development. Experienced in leading the full product lifecycle, from customer discovery and architecture design to backend development, database engineering, testing, and deployment.',
+  secondBio: 'Founder & CTO of DineLink, winner of Falling Walls Jordan 2025 and selected among the Top 100 global innovators at the Falling Walls Foundation in Berlin. Also building VibeSafe, an open-source VS Code extension and CLI tool that helps developers detect security and deployment risks in AI-built applications.',
   
   contact: {
     email: 'talalhjaber@gmail.com',
@@ -14,7 +15,7 @@ export const siteConfig = {
   
   socials: {
     github: 'https://github.com/talaljaber',
-    linkedin: 'https://www.linkedin.com/in/talal-jaber-02132b2b9',
+    linkedin: 'https://linkedin.com/in/talal-jaber1',
     email: 'mailto:talalhjaber@gmail.com',
     whatsapp: 'https://wa.me/962790489125'
   },
