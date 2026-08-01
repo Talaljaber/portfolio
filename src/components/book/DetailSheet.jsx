@@ -247,48 +247,50 @@ export function DetailSheet({ detail, onClose, reducedMotion }) {
             transition={{ duration }}
             onClick={onClose}
           />
-          <motion.div
-            className="sheet"
-            role="dialog"
-            aria-modal="true"
-            aria-label={content.title}
-            initial={{ opacity: 0, y: reducedMotion ? 0 : 18, scale: reducedMotion ? 1 : 0.985 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: reducedMotion ? 0 : 12, scale: reducedMotion ? 1 : 0.99 }}
-            transition={{ duration, ease: [0.24, 0.6, 0.24, 1] }}
-          >
-            <span className="paper-grain" aria-hidden="true" />
+          <div className="sheet-layer">
+            <motion.div
+              className="sheet"
+              role="dialog"
+              aria-modal="true"
+              aria-label={content.title}
+              initial={{ opacity: 0, y: reducedMotion ? 0 : 18, scale: reducedMotion ? 1 : 0.985 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: reducedMotion ? 0 : 12, scale: reducedMotion ? 1 : 0.99 }}
+              transition={{ duration, ease: [0.24, 0.6, 0.24, 1] }}
+            >
+              <span className="paper-grain" aria-hidden="true" />
 
-            <header className="sheet__head">
-              <div className="min-w-0 flex-1">
-                {content.kicker && <p className="u-kicker mb-2">{content.kicker}</p>}
-                <h2 className="u-display text-[clamp(1.5rem,3.4vw,2.1rem)]">{content.title}</h2>
-                {content.standfirst && (
-                  <p className="u-note mt-2 italic" style={{ fontSize: '1.02em' }}>
-                    {content.standfirst}
-                  </p>
-                )}
-              </div>
-              <button
-                type="button"
-                ref={closeRef}
-                onClick={onClose}
-                className="sheet__close"
-                aria-label="Close"
-              >
-                <X size={17} aria-hidden="true" />
-              </button>
-            </header>
+              <header className="sheet__head">
+                <div className="min-w-0 flex-1">
+                  {content.kicker && <p className="u-kicker mb-2">{content.kicker}</p>}
+                  <h2 className="u-display text-[clamp(1.5rem,3.4vw,2.1rem)]">{content.title}</h2>
+                  {content.standfirst && (
+                    <p className="u-note mt-2 italic" style={{ fontSize: '1.02em' }}>
+                      {content.standfirst}
+                    </p>
+                  )}
+                </div>
+                <button
+                  type="button"
+                  ref={closeRef}
+                  onClick={onClose}
+                  className="sheet__close"
+                  aria-label="Close"
+                >
+                  <X size={17} aria-hidden="true" />
+                </button>
+              </header>
 
-            <div className="sheet__body">{content.body}</div>
+              <div className="sheet__body">{content.body}</div>
 
-            {content.actions && (
-              <footer className="sheet__foot">
-                <Rule className="mb-4" />
-                <div className="flex flex-wrap gap-3">{content.actions}</div>
-              </footer>
-            )}
-          </motion.div>
+              {content.actions && (
+                <footer className="sheet__foot">
+                  <Rule className="mb-4" />
+                  <div className="flex flex-wrap gap-3">{content.actions}</div>
+                </footer>
+              )}
+            </motion.div>
+          </div>
         </>
       )}
     </AnimatePresence>

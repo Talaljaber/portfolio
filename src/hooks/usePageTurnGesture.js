@@ -3,8 +3,8 @@ import { useEffect, useRef } from 'react'
 const WHEEL_THRESHOLD = 42 // accumulated px before a gesture counts as intent
 const IMMEDIATE_LOCK_MS = 320 // covers the frames before `busy` propagates
 const MOMENTUM_GAP_MS = 130 // a quiet gap this long ends a trackpad flick
-const SWIPE_DISTANCE_RATIO = 0.2
-const SWIPE_VELOCITY = 0.45 // px per ms
+const SWIPE_DISTANCE_RATIO = 0.14 // a thumb-flick is shorter than you think
+const SWIPE_VELOCITY = 0.35 // px per ms
 const AXIS_LOCK_RATIO = 1.15
 
 /** Wheel deltas arrive in px, lines or pages depending on the device. */
@@ -181,7 +181,14 @@ export function usePageTurnGesture({
     let startAt = 0
     let axis = null // null | 'x' | 'y'
     let dragging = false
+    let tracking = false
     let width = 1
+
+    const reset = () => {
+      axis = null
+      dragging = false
+      tracking = false
+    }
 
     const onTouchStart = (event) => {
       if (event.touches.length !== 1) return
@@ -193,11 +200,12 @@ export function usePageTurnGesture({
       width = surface.getBoundingClientRect().width || 1
       axis = null
       dragging = false
+      tracking = true
     }
 
     const onTouchMove = (event) => {
       const s = live.current
-      if (!s.active || event.touches.length !== 1) return
+      if (!tracking || !s.active || event.touches.length !== 1) return
 
       const dx = event.touches[0].clientX - startX
       const dy = event.touches[0].clientY - startY
@@ -220,36 +228,43 @@ export function usePageTurnGesture({
 
     const onTouchEnd = (event) => {
       const s = live.current
-      if (axis === 'x') {
-        const endX = event.changedTouches?.[0]?.clientX ?? startX
-        const dx = endX - startX
-        const elapsed = Math.max(1, performance.now() - startAt)
-        const velocity = Math.abs(dx) / elapsed
-        const passed =
-          Math.abs(dx) > width * SWIPE_DISTANCE_RATIO || velocity > SWIPE_VELOCITY
+      if (!tracking) return
 
-        if (dragging) {
-          s.onDragEnd?.(passed)
-        } else if (passed && !s.busy) {
-          // Reduced motion, or the drag was declined: still honour the swipe.
-          if (dx < 0) s.onNext?.()
-          else s.onPrevious?.()
-        }
+      const endX = event.changedTouches?.[0]?.clientX ?? startX
+      const endY = event.changedTouches?.[0]?.clientY ?? startY
+      const dx = endX - startX
+      const dy = endY - startY
+      const elapsed = Math.max(1, performance.now() - startAt)
+      const velocity = Math.abs(dx) / elapsed
+      const passed = Math.abs(dx) > width * SWIPE_DISTANCE_RATIO || velocity > SWIPE_VELOCITY
+
+      if (dragging) {
+        s.onDragEnd?.(passed)
+      } else if (passed && Math.abs(dx) > Math.abs(dy) && !s.busy) {
+        // Reached without a resolved axis when the browser delivered no
+        // touchmove at all — a flick still has to turn the page.
+        if (dx < 0) s.onNext?.()
+        else s.onPrevious?.()
       }
-      axis = null
-      dragging = false
+      reset()
+    }
+
+    const onTouchCancel = () => {
+      // The browser took the gesture: put the leaf back rather than commit it.
+      if (dragging) live.current.onDragEnd?.(false)
+      reset()
     }
 
     surface.addEventListener('touchstart', onTouchStart, { passive: true })
     surface.addEventListener('touchmove', onTouchMove, { passive: false })
     surface.addEventListener('touchend', onTouchEnd)
-    surface.addEventListener('touchcancel', onTouchEnd)
+    surface.addEventListener('touchcancel', onTouchCancel)
 
     return () => {
       surface.removeEventListener('touchstart', onTouchStart)
       surface.removeEventListener('touchmove', onTouchMove)
       surface.removeEventListener('touchend', onTouchEnd)
-      surface.removeEventListener('touchcancel', onTouchEnd)
+      surface.removeEventListener('touchcancel', onTouchCancel)
     }
   }, [surfaceRef])
 }
