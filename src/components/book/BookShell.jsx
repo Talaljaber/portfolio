@@ -12,13 +12,17 @@ import SpreadPage, { BlankPage } from './BookSpread'
 import PageTurnLayer from './PageTurnLayer'
 import ContentsIndex from './ContentsIndex'
 import DetailSheet from './DetailSheet'
-import { ContentsButton, EdgeControls } from './BookNavigation'
+import { ContentsButton, EdgeControls, TouchNav } from './BookNavigation'
 import Bookmarks from './Bookmarks'
 import { pageSequence, spreadSequence } from './pageSequence'
 
-const TURN_MS = 760
-const COVER_TURN_MS = 920 // the board is heavier than a leaf
-const TURN_EASE = [0.38, 0.02, 0.13, 1]
+const TURN_MS = 820
+const COVER_TURN_MS = 980 // the board is heavier than a leaf
+// Monotone: a controlled lift, a steady sweep, a soft landing. The second
+// control point must stay ahead of the first — behind it, the leaf reaches
+// 95% in the first third of the duration and then crawls, which reads as the
+// page snapping rather than turning.
+const TURN_EASE = [0.3, 0.08, 0.25, 1]
 
 /** The book is the whole site; the two views differ enough to remount. */
 export function BookShell() {
@@ -268,6 +272,17 @@ function BookExperience({ isMobile }) {
             />
           )}
         </main>
+
+        {isMobile && (
+          <TouchNav
+            position={index}
+            total={nav.lastIndex + 1}
+            atStart={nav.atStart}
+            atEnd={nav.atEnd}
+            onNext={nav.next}
+            onPrevious={nav.previous}
+          />
+        )}
 
         <p className="sr-only" role="status" aria-live="polite">
           {nav.chapter.numeral ? `Chapter ${nav.chapter.numeral}, ` : ''}

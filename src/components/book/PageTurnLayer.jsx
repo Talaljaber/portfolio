@@ -24,13 +24,15 @@ export function PageTurnLayer({ progress, direction, mode = 'spread', front, bac
   const bend = useTransform(progress, (p) => Math.sin(Math.PI * p))
 
   // The sheet lifts off the block as it swings, then settles back down.
-  const lift = useTransform(bend, (b) => b * (single ? 18 : 30))
+  // On a phone the sheet fills the screen, so it lifts further — that parallax
+  // is most of what tells the eye a sheet is moving rather than a wipe.
+  const lift = useTransform(bend, (b) => b * (single ? 46 : 30))
 
   // Fold shading, deepest at the binding.
-  const foldShade = useTransform(bend, (b) => 0.16 + b * 0.5)
+  const foldShade = useTransform(bend, (b) => 0.16 + b * (single ? 0.62 : 0.5))
   // Specular sweep travelling out from the binding.
   const glossPos = useTransform(progress, (p) => `${(forward ? p : 1 - p) * 100}%`)
-  const glossOpacity = useTransform(bend, (b) => b * 0.34)
+  const glossOpacity = useTransform(bend, (b) => b * (single ? 0.46 : 0.34))
 
   // The back of the sheet is in shade until it comes to rest.
   const backShade = useTransform(progress, (p) => {
@@ -47,7 +49,9 @@ export function PageTurnLayer({ progress, direction, mode = 'spread', front, bac
   const leafOpacity = useTransform(progress, (p) => {
     if (!single) return 1
     const settle = forward ? p : 1 - p
-    return settle < 0.84 ? 1 : Math.max(0, 1 - (settle - 0.84) / 0.16)
+    // Late enough that the sheet is edge-on before it goes: fading it any
+    // earlier makes the page vanish mid-air instead of landing on the block.
+    return settle < 0.93 ? 1 : Math.max(0, 1 - (settle - 0.93) / 0.07)
   })
   const nearOpacity = useTransform(angle, (deg) => (Math.abs(deg) > 90 ? 0 : 1))
   const farOpacity = useTransform(angle, (deg) => (Math.abs(deg) > 90 ? 1 : 0))

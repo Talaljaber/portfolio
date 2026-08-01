@@ -274,10 +274,14 @@ body[data-book] {
 .mobile-book {
   --stack-w: clamp(16px, 5.5vw, 34px);
   position: relative;
-  perspective: 1700px;
-  perspective-origin: 26% 50%;
+  /* Shorter than the spread's: the sheet fills the screen here, so it needs a
+     stronger perspective for the turn to read as depth rather than a wipe. */
+  perspective: 1150px;
+  perspective-origin: 30% 50%;
   width: min(94vw, 560px);
-  height: min(86svh, 820px);
+  /* just enough clearance at the foot for the touch bar */
+  height: min(84svh, 800px);
+  margin-bottom: 3.2rem;
 }
 
 .mobile-stack {
@@ -1110,6 +1114,101 @@ li:last-child > .entry {
 .mobile-book .mobile-page__chrome,
 .mobile-book .mobile-page__body {
   padding-right: clamp(2.4rem, 12vw, 3.4rem);
+}
+
+/* ==========================================================================
+   Touch controls — the one place the book explains itself
+   ========================================================================== */
+
+.touch-nav {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: max(0.7rem, env(safe-area-inset-bottom));
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+  pointer-events: none;
+}
+
+.touch-nav__bar {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem;
+  border: 1px solid rgba(220, 205, 180, 0.2);
+  border-radius: 999px;
+  background: rgba(20, 15, 9, 0.82);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  pointer-events: auto;
+}
+
+.touch-nav__step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 40px;
+  border-radius: 999px;
+  color: var(--chrome-ink);
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.touch-nav__step:active:not(:disabled) {
+  background: rgba(220, 205, 180, 0.14);
+}
+
+.touch-nav__step:disabled {
+  opacity: 0.28;
+}
+
+.touch-nav__count {
+  min-width: 4.6em;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: var(--chrome-muted);
+}
+
+/* Shown until the reader turns a page for the first time. */
+.swipe-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(20, 15, 9, 0.72);
+  font-family: var(--font-ui);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--chrome-ink);
+}
+
+/* a finger travelling right to left, on a loop */
+.swipe-hint__sweep {
+  width: 26px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, var(--chrome-accent));
+  animation: swipe-sweep 1.9s ease-in-out infinite;
+}
+
+@keyframes swipe-sweep {
+  0%,
+  100% {
+    transform: translateX(5px);
+    opacity: 0.35;
+  }
+  45% {
+    transform: translateX(-5px);
+    opacity: 1;
+  }
 }
 
 /* invisible page-edge affordances */
