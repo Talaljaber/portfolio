@@ -1,28 +1,25 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { animate, motion, useMotionValue, useTransform } from 'framer-motion'
 
-import { spreads } from '../../content/book'
 import { useBookNavigation } from '../../hooks/useBookNavigation'
 import { usePageTurnGesture } from '../../hooks/usePageTurnGesture'
 import { useReducedMotionPreference } from '../../hooks/useReducedMotionPreference'
 import { useMediaQuery } from '../../hooks/useMediaQuery'
 
 import { BookContext } from './BookContext'
-import SpreadPage, { BlankPage } from './BookSpread'
-import PageTurnLayer from './PageTurnLayer'
+import SpreadPage from './BookSpread'
+import PageSlideLayer from './PageSlideLayer'
 import ContentsIndex from './ContentsIndex'
 import DetailSheet from './DetailSheet'
 import { ContentsButton, EdgeControls, TouchNav } from './BookNavigation'
 import Bookmarks from './Bookmarks'
 import { pageSequence, spreadSequence } from './pageSequence'
 
-const TURN_MS = 820
-const COVER_TURN_MS = 980 // the board is heavier than a leaf
-// Monotone: a controlled lift, a steady sweep, a soft landing. The second
-// control point must stay ahead of the first — behind it, the leaf reaches
-// 95% in the first third of the duration and then crawls, which reads as the
-// page snapping rather than turning.
-const TURN_EASE = [0.3, 0.08, 0.25, 1]
+const TURN_MS = 520
+const COVER_TURN_MS = 620 // the board is heavier than a leaf
+// Accelerate, then decelerate: 24% of the travel by a quarter of the time,
+// 78% by half, the rest spent settling.
+const TURN_EASE = [0.4, 0, 0.2, 1]
 
 /** The book is the whole site; the two views differ enough to remount. */
 export function BookShell() {
@@ -59,30 +56,34 @@ function BookExperience({ isMobile }) {
     }
   }, [])
 
+  // While a sheet or the index is open, the book underneath is inert: no
+  // scrolling reaches it and no gesture turns a page behind the overlay.
+  useEffect(() => {
+    const locked = contentsOpen || detail !== null
+    if (!locked) {
+      delete document.body.dataset.locked
+      return undefined
+    }
+    document.body.dataset.locked = 'true'
+    return () => {
+      delete document.body.dataset.locked
+    }
+  }, [contentsOpen, detail])
+
   /* ------------------------------------------------------- page geometry */
 
   const moving =
     transition &&
     (transition.mode === 'turn' || transition.mode === 'drag' || transition.mode === 'return')
 
-  const frame = useMemo(() => {
-    if (!moving) return { a: index, b: index, leaf: null }
-
-    // Forward: the current sheet lifts away, uncovering the next one.
-    // Backward: the previous sheet folds back in over the current one.
-    if (transition.direction === 'forward') {
-      return {
-        a: transition.from,
-        b: transition.to,
-        leaf: { front: transition.from, back: transition.to, direction: 'forward' },
-      }
-    }
-    return {
-      a: transition.to,
-      b: transition.from,
-      leaf: { front: transition.to, back: transition.from, direction: 'backward' },
-    }
-  }, [moving, transition, index])
+  // Either one resting page, or the pair that is sliding past each other.
+  const frame = useMemo(
+    () =>
+      moving
+        ? { resting: null, from: transition.from, to: transition.to, direction: transition.direction }
+        : { resting: index, from: null, to: null, direction: null },
+    [moving, transition, index],
+  )
 
   /* ---------------------------------------------------------- animations */
 
@@ -138,7 +139,7 @@ function BookExperience({ isMobile }) {
   /* --------------------------------------------- keep the book un-stuck */
 
   useEffect(() => {
-    // A resize or a hidden tab mid-turn would otherwise freeze the leaf.
+    // A resize or a hidden tab mid-slide would otherwise freeze the pages.
     const settle = () => {
       if (!transition) return
       if (transition.mode === 'return') cancelTransition()
@@ -248,7 +249,6 @@ function BookExperience({ isMobile }) {
               progress={progress}
               bookOpacity={bookOpacity}
               renderUnit={renderUnit}
-              tone={spreads[sequence[index].spreadIndex].tone}
               atStart={nav.atStart}
               atEnd={nav.atEnd}
               onNext={nav.next}
@@ -318,7 +318,15 @@ function SpreadBook({
   activeChapterId,
   onGoToChapter,
 }) {
-  const spreadAt = (i) => sequence[i]?.spreadIndex ?? 0
+  const spread = (i) => {
+    const index = sequence[i]?.spreadIndex ?? 0
+    return (
+      <div className="book-pages">
+        <SpreadPage index={index} side="left" />
+        <SpreadPage index={index} side="right" />
+      </div>
+    )
+  }
 
   return (
     <div className="book-perspective">
@@ -326,22 +334,20 @@ function SpreadBook({
         <span className="book-block" style={{ inset: '6px -7px -8px -7px' }} aria-hidden="true" />
         <span className="book-block" style={{ inset: '3px -4px -4px -4px' }} aria-hidden="true" />
 
-        <div className="book-pages">
-          <SpreadPage index={spreadAt(frame.a)} side="left" />
-          <SpreadPage index={spreadAt(frame.b)} side="right" />
+        <div className="book-viewport">
+          {frame.resting != null ? (
+            spread(frame.resting)
+          ) : (
+            <PageSlideLayer
+              progress={progress}
+              direction={frame.direction}
+              from={spread(frame.from)}
+              to={spread(frame.to)}
+            />
+          )}
         </div>
 
         <span className="book-spine" aria-hidden="true" />
-
-        {frame.leaf && (
-          <PageTurnLayer
-            progress={progress}
-            direction={frame.leaf.direction}
-            mode="spread"
-            front={<SpreadPage index={spreadAt(frame.leaf.front)} side="right" />}
-            back={<SpreadPage index={spreadAt(frame.leaf.back)} side="left" />}
-          />
-        )}
       </motion.div>
 
       <Bookmarks activeChapterId={activeChapterId} onGoToChapter={onGoToChapter} />
@@ -357,7 +363,6 @@ function SinglePageBook({
   progress,
   bookOpacity,
   renderUnit,
-  tone,
   atStart,
   atEnd,
   onNext,
@@ -367,21 +372,21 @@ function SinglePageBook({
 }) {
   return (
     <motion.div className="mobile-book" style={{ opacity: bookOpacity }}>
-      {/* The pages already read. A turned page folds down onto this block and
-          stays there, so the book visibly thickens on the left as you read. */}
+      {/* The pages already read, so the book visibly thickens as you go. */}
       <span className="mobile-stack" aria-hidden="true" />
 
-      <div className="mobile-slot">{renderUnit(frame.b)}</div>
-
-      {frame.leaf && (
-        <PageTurnLayer
-          progress={progress}
-          direction={frame.leaf.direction}
-          mode="single"
-          front={renderUnit(frame.leaf.front)}
-          back={<BlankPage tone={tone} />}
-        />
-      )}
+      <div className="mobile-slot">
+        {frame.resting != null ? (
+          renderUnit(frame.resting)
+        ) : (
+          <PageSlideLayer
+            progress={progress}
+            direction={frame.direction}
+            from={renderUnit(frame.from)}
+            to={renderUnit(frame.to)}
+          />
+        )}
+      </div>
 
       <Bookmarks activeChapterId={activeChapterId} onGoToChapter={onGoToChapter} />
       <EdgeControls atStart={atStart} atEnd={atEnd} onNext={onNext} onPrevious={onPrevious} />

@@ -43,8 +43,8 @@
   --border: rgba(43, 29, 13, 0.26);
 
   /* --- Cover: worn leather boards ------------------------------------- */
-  --cover-cloth: #3a2517;
-  --cover-cloth-deep: #1f1209;
+  --cover-cloth: #33200f;
+  --cover-cloth-deep: #150c05;
   --cover-ink: #e2cda2;
 
   /* --- Shadows -------------------------------------------------------- */
@@ -116,6 +116,12 @@ body[data-book] {
   height: 100%;
   overflow: hidden;
   overscroll-behavior: none;
+}
+
+/* An open sheet or index makes the book inert: nothing behind it moves. */
+body[data-locked] .book-stage {
+  pointer-events: none;
+  touch-action: none;
 }
 
 ::selection {
@@ -274,9 +280,10 @@ body[data-book] {
 }
 
 /* Single-page view: the block of read pages on the left, the page being read
-   on the right. A turned leaf hinges on the join between them. */
+   in the middle, the chapter tabs in a column of their own on the right. */
 .mobile-book {
-  --stack-w: clamp(16px, 5.5vw, 34px);
+  --stack-w: clamp(12px, 4vw, 26px);
+  --tab-w: clamp(30px, 8.5vw, 42px);
   position: relative;
   /* Shorter than the spread's: the sheet fills the screen here, so it needs a
      stronger perspective for the turn to read as depth rather than a wipe. */
@@ -309,7 +316,9 @@ body[data-book] {
   top: 0;
   bottom: 0;
   left: var(--stack-w);
-  right: 0;
+  right: var(--tab-w);
+  overflow: hidden;
+  border-radius: var(--page-radius);
 }
 
 /* ==========================================================================
@@ -385,6 +394,11 @@ body[data-book] {
 
 .mobile-page:not(.cover-cloth) {
   border-radius: var(--page-radius);
+  padding: 0;
+}
+
+/* The boards are designed edge to edge; the frame sets its own inset. */
+.page.cover-cloth {
   padding: 0;
 }
 
@@ -487,169 +501,52 @@ body[data-book] {
 }
 
 /* ==========================================================================
-   The turning leaf
+   The page transition
+
+   Two sheets sliding past each other inside the clipped viewport. Each page
+   exists exactly once on screen at any moment.
    ========================================================================== */
 
-.leaf {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 50%;
-  height: 100%;
-  transform-style: preserve-3d;
-  transform-origin: left center;
-  will-change: transform;
-  z-index: 20;
-  pointer-events: none;
-}
-
-/* In the single-page view the leaf occupies the page slot and hinges where
-   the slot meets the block of read pages. */
-.leaf--single {
-  left: var(--stack-w);
-  right: 0;
-  width: auto;
-}
-
-.leaf__face {
+.book-viewport {
   position: absolute;
   inset: 0;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
   overflow: hidden;
+  border-radius: var(--page-radius);
 }
 
-/* A page is a grid item in the static spread, so it stretches to the cell.
-   On a leaf face it is an ordinary block child and would otherwise collapse
-   to its content height — turning only part of the sheet. */
-.leaf__face > .page,
-.leaf__face > .mobile-page {
-  width: 100%;
-  height: 100%;
-}
-
-.leaf__face--back {
-  transform: rotateY(180deg);
-}
-
-/* Fold shading. The binding is the leaf's own left edge, which the mirrored
-   back face sees as its right edge. */
-.leaf__fold {
+.slide {
   position: absolute;
   inset: 0;
-  z-index: 6;
-  pointer-events: none;
+  will-change: transform;
 }
 
-.leaf__fold--front {
-  background: linear-gradient(
-    90deg,
-    rgba(28, 19, 10, 0.85) 0%,
-    rgba(38, 26, 14, 0.34) 26%,
-    transparent 62%
-  );
+/* The sheet being left rides above the one arriving. */
+.slide--out {
+  z-index: 2;
 }
 
-.leaf__fold--back {
-  background: linear-gradient(
-    270deg,
-    rgba(28, 19, 10, 0.85) 0%,
-    rgba(38, 26, 14, 0.34) 26%,
-    transparent 62%
-  );
+.slide--in {
+  z-index: 1;
 }
 
-/* specular band sweeping out from the binding as the sheet passes upright */
-.leaf__gloss {
+.slide__shade {
   position: absolute;
   inset: 0;
-  z-index: 7;
+  z-index: 9;
   pointer-events: none;
-  background-image: linear-gradient(
-    102deg,
-    transparent 0%,
-    rgba(255, 251, 240, 0.75) 46%,
-    rgba(255, 251, 240, 0.9) 50%,
-    rgba(255, 251, 240, 0.75) 54%,
-    transparent 100%
-  );
-  background-size: 230% 100%;
-  background-repeat: no-repeat;
-  mix-blend-mode: screen;
+  background: rgba(28, 19, 9, 0.9);
 }
 
-/* paper thickness along the free edge */
-.leaf__edge {
+/* the lit trim of the sheet on the move */
+.slide__edge {
   position: absolute;
   top: 0;
   bottom: 0;
+  right: -3px;
   width: 3px;
-  z-index: 8;
-  pointer-events: none;
-}
-
-.leaf__edge--front {
-  right: 0;
-  background: linear-gradient(90deg, rgba(255, 252, 244, 0.9), rgba(150, 128, 96, 0.55));
-}
-
-.leaf__edge--back {
-  left: 0;
-  background: linear-gradient(270deg, rgba(255, 252, 244, 0.9), rgba(150, 128, 96, 0.55));
-}
-
-/* shadow the leaf throws onto the page beneath it */
-.leaf-cast {
-  position: absolute;
-  top: 0;
-  bottom: 0;
   z-index: 10;
   pointer-events: none;
-  will-change: opacity, transform;
-}
-
-.leaf-cast--right {
-  right: 0;
-  width: 50%;
-  transform-origin: left center;
-}
-
-.leaf-cast--left {
-  left: 0;
-  width: 50%;
-  transform-origin: right center;
-}
-
-.leaf-cast--single {
-  left: var(--stack-w);
-  right: 0;
-  width: auto;
-  transform-origin: left center;
-}
-
-.leaf-cast__near,
-.leaf-cast__far {
-  position: absolute;
-  inset: 0;
-}
-
-.leaf-cast--right .leaf-cast__near,
-.leaf-cast--single .leaf-cast__near {
-  background: linear-gradient(
-    90deg,
-    var(--turn-shadow) 0%,
-    rgba(30, 22, 14, 0.14) 58%,
-    transparent 94%
-  );
-}
-
-.leaf-cast--left .leaf-cast__far {
-  background: linear-gradient(
-    270deg,
-    var(--turn-shadow) 0%,
-    rgba(30, 22, 14, 0.14) 58%,
-    transparent 94%
-  );
+  background: linear-gradient(90deg, rgba(255, 250, 236, 0.75), rgba(120, 96, 60, 0.4));
 }
 
 /* ==========================================================================
@@ -791,62 +688,52 @@ body[data-book] {
 }
 
 /* ==========================================================================
-   Entries — a list row that opens the detail sheet
+   Entries — a row of the index
 
-   The row itself is the button, so the whole thing is a comfortable target on
-   a phone; the "Details" label is there so it never has to be discovered.
+   The text is text: selectable, not a target. The button beside it is the
+   only thing that opens anything.
    ========================================================================== */
 
 .entry {
   display: flex;
   align-items: center;
   gap: 0.9rem;
-  width: 100%;
-  text-align: left;
   padding: var(--lead-2) 0;
   border-bottom: 1px solid var(--border);
-  transition: background-color 0.2s ease, padding-left 0.2s ease;
 }
 
-li:last-child > .entry {
+.entry:last-child {
   border-bottom: 0;
 }
 
 .entry__main {
-  display: block;
   min-width: 0;
   flex: 1;
 }
 
 .entry__cta {
   flex-shrink: 0;
+  align-self: center;
   font-family: var(--font-ui);
   font-size: 0.66rem;
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--accent);
-  border: 1px solid var(--border);
+  background: var(--accent-wash);
+  border: 1px solid var(--accent);
   border-radius: 2px;
-  padding: 0.3rem 0.55rem;
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  /* a target worth aiming a thumb at */
+  min-height: 38px;
+  padding: 0.4rem 0.7rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-.entry:hover,
-.entry:focus-visible {
-  background-color: var(--accent-wash);
-  padding-left: 0.5rem;
-}
-
-.entry:hover .entry__cta,
-.entry:focus-visible .entry__cta {
+.entry__cta:hover,
+.entry__cta:focus-visible,
+.entry__cta:active {
   background-color: var(--accent);
-  border-color: var(--accent);
   color: var(--paper-lit);
-}
-
-.entry:hover .entry__title {
-  color: var(--accent);
 }
 
 /* the one-line preview of a longer entry */
@@ -956,9 +843,12 @@ li:last-child > .entry {
 .page.cover-cloth,
 .mobile-page.cover-cloth {
   background:
-    radial-gradient(110% 85% at 34% 16%, rgba(255, 214, 150, 0.1), transparent 62%),
-    radial-gradient(130% 120% at 50% 50%, transparent 40%, rgba(0, 0, 0, 0.42) 100%),
-    linear-gradient(158deg, var(--cover-cloth) 0%, var(--cover-cloth-deep) 100%);
+    /* the sheen of polished calf, raked from the upper left */
+    radial-gradient(120% 80% at 28% 8%, rgba(255, 216, 156, 0.13), transparent 54%),
+    /* the darkening that comes with handling: corners and edges first */
+    radial-gradient(140% 130% at 50% 46%, transparent 32%, rgba(0, 0, 0, 0.55) 100%),
+    radial-gradient(50% 40% at 88% 92%, rgba(0, 0, 0, 0.3), transparent 70%),
+    linear-gradient(152deg, #422a16 0%, var(--cover-cloth) 40%, var(--cover-cloth-deep) 100%);
   color: var(--cover-ink);
   --ink: var(--cover-ink);
   --muted: #9c8a6d;
@@ -967,6 +857,200 @@ li:last-child > .entry {
   --rule-strong: rgba(230, 216, 191, 0.42);
   --border: rgba(230, 216, 191, 0.18);
   --accent: var(--gold);
+}
+
+/* --- The boards ------------------------------------------------------- */
+
+.cover-board {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* The gilt frame: a heavy rule, a hairline inside it, tooled corners. */
+.cover-frame {
+  position: absolute;
+  inset: clamp(0.9rem, 3.2cqi, 2.4rem);
+  border: 1.5px solid var(--gold);
+  color: var(--gold);
+  opacity: 0.72;
+  pointer-events: none;
+}
+
+.cover-frame::after {
+  content: '';
+  position: absolute;
+  inset: clamp(5px, 1.1cqi, 10px);
+  border: 0.5px solid var(--gold);
+  opacity: 0.66;
+}
+
+.cover-frame__corner {
+  position: absolute;
+}
+
+.cover-frame__corner--tl {
+  top: -1px;
+  left: -1px;
+}
+.cover-frame__corner--tr {
+  top: -1px;
+  right: -1px;
+  transform: scaleX(-1);
+}
+.cover-frame__corner--bl {
+  bottom: -1px;
+  left: -1px;
+  transform: scaleY(-1);
+}
+.cover-frame__corner--br {
+  bottom: -1px;
+  right: -1px;
+  transform: scale(-1);
+}
+
+.cover-inner {
+  position: relative;
+  z-index: 2;
+  width: min(84%, 42ch);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(0.7rem, 2.4cqi, 1.5rem);
+}
+
+.cover-imprint {
+  font-family: var(--font-ui);
+  font-size: clamp(0.6rem, 1.5cqi, 0.78rem);
+  font-weight: 500;
+  letter-spacing: 0.42em;
+  text-indent: 0.42em; /* keep the tracking from pulling it off-centre */
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.85;
+}
+
+/* The stamped panel the name sits in. */
+.cover-cartouche {
+  position: relative;
+  width: 100%;
+  padding: clamp(0.8rem, 2.6cqi, 1.6rem) clamp(0.6rem, 2cqi, 1.4rem);
+  border-top: 1px solid rgba(190, 155, 92, 0.5);
+  border-bottom: 1px solid rgba(190, 155, 92, 0.5);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 226, 168, 0.05),
+    rgba(0, 0, 0, 0.16)
+  );
+}
+
+.cover-name {
+  font-family: var(--font-book);
+  font-weight: 500;
+  font-size: clamp(2rem, min(9cqi, 7.4vh), 4.4rem);
+  line-height: 1.02;
+  letter-spacing: 0.012em;
+  text-wrap: balance;
+}
+
+.cover-role {
+  font-family: var(--font-book);
+  font-style: italic;
+  font-size: clamp(1rem, min(3.5cqi, 2.7vh), 1.5rem);
+  color: var(--cover-ink);
+  opacity: 0.86;
+}
+
+.cover-colophon {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-ui);
+  font-size: clamp(0.58rem, 1.4cqi, 0.72rem);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--cover-ink);
+  opacity: 0.6;
+}
+
+.cover-colophon__dot {
+  opacity: 0.5;
+}
+
+.cover-open {
+  position: absolute;
+  bottom: clamp(1.8rem, 5cqi, 3.4rem);
+  z-index: 2;
+  font-family: var(--font-ui);
+  font-size: clamp(0.56rem, 1.35cqi, 0.7rem);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--cover-ink);
+  opacity: 0.42;
+}
+
+/* --- The spine -------------------------------------------------------- */
+
+.cover-spine {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: clamp(1rem, 4cqi, 2.4rem);
+  padding: clamp(1.4rem, 5cqi, 3rem) 0;
+}
+
+/* a raised band across the spine, as on a sewn binding */
+.cover-band {
+  flex-shrink: 0;
+  height: clamp(9px, 1.6cqi, 15px);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 224, 166, 0.16),
+    rgba(0, 0, 0, 0.34) 60%,
+    rgba(0, 0, 0, 0.12)
+  );
+  box-shadow: inset 0 1px 0 rgba(255, 226, 175, 0.2), 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.cover-spine__plate {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid rgba(190, 155, 92, 0.32);
+  border-bottom: 1px solid rgba(190, 155, 92, 0.32);
+}
+
+.cover-spine__title {
+  writing-mode: vertical-rl;
+  font-family: var(--font-book);
+  font-size: clamp(1.1rem, 4cqi, 2rem);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.cover-spine__foot {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(0.6rem, 2cqi, 1.2rem) 0;
+}
+
+.cover-spine__mark {
+  font-family: var(--font-book);
+  font-size: clamp(0.9rem, 3cqi, 1.4rem);
+  letter-spacing: 0.2em;
+  border: 1px solid rgba(190, 155, 92, 0.45);
+  border-radius: 2px;
+  padding: 0.3em 0.5em 0.25em;
 }
 
 /* Grained leather rather than woven cloth: irregular, not a regular weave. */
@@ -981,9 +1065,22 @@ li:last-child > .entry {
   background-size: 220px 220px;
 }
 
+/* Gold leaf: a bright edge above, a shadow below, and a soft gradient across
+   the face so the letters catch the light unevenly the way stamped foil does. */
 .cover-foil {
   color: var(--gold);
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.45);
+  background-image: linear-gradient(
+    172deg,
+    #f0d79a 0%,
+    #c9a256 28%,
+    #8d6a2c 52%,
+    #d8b978 74%,
+    #a5813e 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.55)) drop-shadow(0 0 10px rgba(198, 158, 86, 0.2));
 }
 
 /* ==========================================================================
@@ -1036,7 +1133,7 @@ li:last-child > .entry {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  --mark-w: clamp(30px, 3.4vw, 44px);
+  --mark-w: clamp(32px, 3.6vw, 46px);
 }
 
 /* The tabs share the height of the block, so adding a chapter shortens them
@@ -1106,14 +1203,14 @@ li:last-child > .entry {
 }
 
 /* On a single page the tabs ride the outer edge of the sheet. */
-/* On a phone there is no margin beside the sheet, so the tabs ride the outer
-   edge of the page itself rather than hanging off the book. */
+/* On a phone the tabs get a column of their own beside the sheet, so nothing
+   is ever printed underneath them. */
 .mobile-book .book-marks {
-  top: 5%;
-  bottom: 5%;
-  right: calc(-1 * var(--mark-w) + 18px);
-  gap: 6px;
-  --mark-w: clamp(26px, 7vw, 36px);
+  top: 2%;
+  bottom: 2%;
+  right: 0;
+  gap: 5px;
+  --mark-w: var(--tab-w);
 }
 
 .mobile-book .book-mark {
@@ -1123,12 +1220,6 @@ li:last-child > .entry {
 .mobile-book .book-mark__label {
   font-size: 0.48rem;
   letter-spacing: 0.08em;
-}
-
-/* Keep the text clear of the tabs, which sit over the page's outer edge. */
-.mobile-book .mobile-page__chrome,
-.mobile-book .mobile-page__body {
-  padding-right: clamp(2.4rem, 12vw, 3.4rem);
 }
 
 /* ==========================================================================
@@ -1360,11 +1451,6 @@ li:last-child > .entry {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
-  }
-
-  .leaf,
-  .leaf-cast {
-    display: none !important;
   }
 
   *,

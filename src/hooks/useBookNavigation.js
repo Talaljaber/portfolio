@@ -4,28 +4,21 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { chapters, spreads } from '../content/book'
 import { firstUnitOfChapter, firstUnitOfSpread } from '../components/book/pageSequence'
 
-const STORAGE_KEY = 'book:spread'
-
 function chapterIdFromHash(hash) {
   const id = (hash || '').replace(/^#/, '')
   return chapters.some((c) => c.id === id) ? id : null
 }
 
+/**
+ * Where the book opens.
+ *
+ * At the cover, unless the URL names a chapter. Restoring the last spread
+ * read was worse than it sounded: arriving at the site dropped you into the
+ * middle of a book you had not opened yet.
+ */
 function initialIndex(sequence, hash) {
   const fromHash = chapterIdFromHash(hash)
-  if (fromHash) return firstUnitOfChapter(sequence, fromHash)
-
-  // Stored as a spread index so the position survives a switch between the
-  // two-page and single-page sequences.
-  try {
-    const stored = Number(sessionStorage.getItem(STORAGE_KEY))
-    if (Number.isInteger(stored) && stored >= 0 && stored < spreads.length) {
-      return firstUnitOfSpread(sequence, stored)
-    }
-  } catch {
-    /* sessionStorage unavailable — start at the cover */
-  }
-  return 0
+  return fromHash ? firstUnitOfChapter(sequence, fromHash) : 0
 }
 
 /**
@@ -141,14 +134,6 @@ export function useBookNavigation(sequence) {
     // Reacts to the book moving; the effect above reacts to the URL moving.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chapter.id])
-
-  useEffect(() => {
-    try {
-      sessionStorage.setItem(STORAGE_KEY, String(unit.spreadIndex))
-    } catch {
-      /* non-fatal */
-    }
-  }, [unit.spreadIndex])
 
   return {
     index,

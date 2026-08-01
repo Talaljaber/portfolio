@@ -44,15 +44,16 @@ function PageTitle({ children, note }) {
   )
 }
 
-/** A clickable row. The row is the button — the label just makes that plain. */
+/**
+ * A row of the index. The text is text — selectable, not a target — and the
+ * button beside it is the only thing that opens anything.
+ */
 function Entry({ onClick, ariaLabel, cta = 'Details', children }) {
   return (
-    <li>
-      <button type="button" className="entry" onClick={onClick} aria-label={ariaLabel}>
-        <span className="entry__main">{children}</span>
-        <span className="entry__cta" aria-hidden="true">
-          {cta}
-        </span>
+    <li className="entry">
+      <div className="entry__main">{children}</div>
+      <button type="button" className="entry__cta" onClick={onClick} aria-label={ariaLabel}>
+        {cta}
       </button>
     </li>
   )
@@ -60,41 +61,70 @@ function Entry({ onClick, ariaLabel, cta = 'Details', children }) {
 
 /* ============================================================ front matter */
 
+/** A tooled corner of the gilt frame, repeated at all four corners. */
+const CornerFleuron = ({ className }) => (
+  <svg
+    viewBox="0 0 40 40"
+    width="34"
+    height="34"
+    aria-hidden="true"
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1"
+  >
+    <path d="M0 12 C 10 12, 12 10, 12 0" />
+    <path d="M0 6 C 4 6, 6 4, 6 0" opacity="0.7" />
+    <circle cx="13.5" cy="13.5" r="1.7" fill="currentColor" stroke="none" />
+  </svg>
+)
+
+/** The spine board: raised bands, the title stamped between them. */
 const CoverVerso = () => (
-  <div className="flex h-full flex-col justify-between">
-    <span className="u-mono">{siteConfig.handle}</span>
-    <div className="flex justify-center">
-      <Ornament width={54} />
+  <div className="cover-spine">
+    <span className="cover-band" aria-hidden="true" />
+    <div className="cover-spine__plate">
+      <span className="cover-spine__title cover-foil">{siteConfig.name}</span>
     </div>
-    <span className="u-mono">{siteConfig.location}</span>
+    <span className="cover-band" aria-hidden="true" />
+    <div className="cover-spine__foot">
+      <span className="cover-spine__mark cover-foil">TJ</span>
+    </div>
+    <span className="cover-band" aria-hidden="true" />
   </div>
 )
 
+/** The front board. */
 const CoverRecto = () => (
-  <div className="flex h-full flex-col items-center justify-center text-center">
-    <div className="w-full max-w-[88%]">
-      <Rule double className="mb-7" />
-      <p className="u-kicker u-smallcaps mb-6" style={{ color: 'var(--gold)' }}>
-        Portfolio
-      </p>
-      <h1
-        className="u-display cover-foil text-[clamp(2.4rem,min(8.3cqi,7.6vh),5rem)]"
-        style={{ lineHeight: 1.06 }}
-      >
-        {siteConfig.name}
-      </h1>
-      <p
-        className="mt-4 font-book text-[clamp(1.15rem,min(3.8cqi,2.9vh),1.6rem)] italic"
-        style={{ color: 'var(--cover-ink)', opacity: 0.84 }}
-      >
-        {siteConfig.title}
-      </p>
-      <Ornament className="mx-auto my-7" width={92} />
-      <Rule double />
-      <p className="u-note mt-7" style={{ color: 'var(--muted)' }}>
-        Scroll, swipe or use the ribbons down the edge to move through the book.
+  <div className="cover-board">
+    <div className="cover-frame" aria-hidden="true">
+      <CornerFleuron className="cover-frame__corner cover-frame__corner--tl" />
+      <CornerFleuron className="cover-frame__corner cover-frame__corner--tr" />
+      <CornerFleuron className="cover-frame__corner cover-frame__corner--bl" />
+      <CornerFleuron className="cover-frame__corner cover-frame__corner--br" />
+    </div>
+
+    <div className="cover-inner">
+      <p className="cover-imprint">Portfolio</p>
+
+      <div className="cover-cartouche">
+        <h1 className="cover-name cover-foil">{siteConfig.name}</h1>
+      </div>
+
+      <p className="cover-role">{siteConfig.title}</p>
+
+      <Ornament className="mx-auto" width={110} />
+
+      <p className="cover-colophon">
+        {siteConfig.location}
+        <span className="cover-colophon__dot" aria-hidden="true">
+          ·
+        </span>
+        Bound in {new Date().getFullYear()}
       </p>
     </div>
+
+    <p className="cover-open">Swipe, scroll or press → to open</p>
   </div>
 )
 
@@ -228,7 +258,7 @@ const ProjectList = ({ pageProps }) => {
   return (
     <div className="flex h-full flex-col">
       {(head ?? from === 0) && (
-        <PageTitle note={`${projects.length} projects · tap any entry to read it`}>
+        <PageTitle note={`${projects.length} projects · tap Details to read more`}>
           Projects
         </PageTitle>
       )}
@@ -270,7 +300,7 @@ const RoleList = ({ pageProps }) => {
   return (
     <div className="flex h-full flex-col">
       {(head ?? from === 0) && (
-        <PageTitle note={`${experience.length} roles · tap any entry to read it`}>
+        <PageTitle note={`${experience.length} roles · tap Details to read more`}>
           Experience
         </PageTitle>
       )}
@@ -316,7 +346,7 @@ const ServiceList = ({ pageProps }) => {
   return (
     <div className="flex h-full flex-col">
       {(head ?? from === 0) && (
-        <PageTitle note={`${services.length} services · tap any entry to read it`}>
+        <PageTitle note={`${services.length} services · tap Details to read more`}>
           Services
         </PageTitle>
       )}
@@ -376,7 +406,7 @@ const AchievementList = ({ pageProps }) => {
   return (
     <div className="flex h-full flex-col">
       {(head ?? from === 0) && (
-        <PageTitle note={`${achievements.length} entries · tap any entry to read it`}>
+        <PageTitle note={`${achievements.length} entries · tap Details to read more`}>
           Achievements
         </PageTitle>
       )}

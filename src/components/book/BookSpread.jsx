@@ -50,13 +50,4 @@ export function SpreadPage({ index, side, container = 'page', pageProps }) {
   )
 }
 
-/** The blank verso of a leaf in the single-page view. */
-export function BlankPage({ tone }) {
-  return (
-    <div className="mobile-page" data-tone={tone || undefined}>
-      <span className="paper-grain" aria-hidden="true" />
-    </div>
-  )
-}
-
 export default SpreadPage
