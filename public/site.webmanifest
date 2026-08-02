@@ -1,16 +1,17 @@
 {
-  "name": "Talal Jaber Portfolio",
-  "short_name": "Talal",
-  "description": "Software Engineer & Full-Stack Developer",
+  "name": "Talal Jaber — Engineer",
+  "short_name": "Talal Jaber",
+  "description": "Software engineering, AI systems, and scalable web experiences.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#10b981",
+  "background_color": "#05060a",
+  "theme_color": "#05060a",
   "icons": [
     {
       "src": "/portfolio.svg",
       "sizes": "any",
-      "type": "image/svg+xml"
+      "type": "image/svg+xml",
+      "purpose": "any"
     }
   ]
 }

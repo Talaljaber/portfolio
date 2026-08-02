@@ -1,0 +1,239 @@
+Talal Jaber
+talalhjaber@gmail.com | +962 7 9048 9125 | Amman, Jordan
+Portfolio: https://talalportfolio.netlify.app/
+LinkedIn: https://linkedin.com/in/talal-jaber1
+GitHub: https://github.com/talaljaber
+
+SUMMARY
+
+Software Engineer and Computer Engineering student at the German Jordanian University, focused on full-stack product engineering, system design, and secure AI-assisted development. Experienced in leading the full product lifecycle, from customer discovery and architecture design to backend development, database engineering, testing, and deployment.
+
+Founder & CTO of DineLink, winner of Falling Walls Jordan 2025 and selected among the Top 100 global innovators at the Falling Walls Foundation in Berlin. Also building VibeSafe, an open-source VS Code extension and CLI tool that helps developers detect security and deployment risks in AI-built applications.
+
+SKILLS
+
+Main Technical Focus
+
+• Product & System Design: product discovery, customer interviews, requirement analysis, MVP scoping, feature prioritization, technical roadmapping, system architecture, backend architecture, database design, relational data modeling, API design, API integration, and full-stack architecture.
+
+• Full-Stack Web Development: Next.js, React.js, TypeScript, JavaScript, Node.js, NestJS, FastAPI, REST APIs, PostgreSQL, MySQL, Supabase, authentication flows, backend validation, front-end/back-end communication, real-time data handling, dashboard development, responsive UI development, and end-to-end web application delivery.
+
+• Developer Tools & Secure Development: VS Code Extension API, CLI development, TypeScript monorepos, static analysis, rule-based security detectors, secret scanning, frontend key exposure detection, secure endpoint awareness, environment-variable safety, authentication/authorization awareness, input validation awareness, and open-source workflows.
+
+• AI-Assisted Engineering: using LLMs and AI coding tools for prototyping, debugging, refactoring, documentation, architecture exploration, and faster product iteration.
+
+Applied Technical Knowledge
+
+• AI, ML & Data: machine learning applications, SVM classification, feature extraction, FFT analysis, filtering, window segmentation, normalization, signal processing pipelines, IMU sensor-data processing, activity recognition, ML model integration, MediaPipe, OpenCV, real-time landmark detection, and real-time prediction dashboards.
+
+• DevOps & Deployment: Git/GitHub, GitHub Actions, Docker, Netlify, AWS, Hetzner, Linux, CI/CD pipeline management, production deployment workflows, cloud deployment basics, npm package publishing, VS Code Marketplace publishing, and Open VSX publishing.
+
+• Networking & Systems: HTTP/HTTPS, DNS, TCP, UDP, WebSockets, foundational network architecture, Linux basics, and distributed systems communication.
+
+Programming & CS Foundations
+
+• Languages: TypeScript, JavaScript, Python, Java, C, C++, SQL, and x86 Assembly.
+
+• Fundamentals: Object-Oriented Programming, Data Structures, Algorithms, clean code principles, modular architecture, testing, debugging, and software design patterns.
+
+Working Knowledge
+
+• Kubernetes basics, Vue.js, Vite, Oracle APEX, CI/CD optimization, containerization concepts, cloud infrastructure basics, cybersecurity testing fundamentals, and German B1.
+
+EXPERIENCE
+
+DineLink | Founder & CTO | Feb 2025 – Present
+DineLink: https://dinelink.org/
+GJU Feature: https://www.gju.edu.jo/news/german-jordanian-university-shines-its-student-wins-global-innovation-competition-20552
+TTi Feature: https://tti-jo.org/from-jordan-to-berlin-talal-jaber-represents-jordan-at-the-falling-walls-lab-global-finals/
+
+• Founded and led the development of DineLink, an AI-powered restaurant management platform designed to help restaurants improve operations, decision-making, and efficiency.
+
+• Conducted customer discovery interviews with 15+ local restaurant owners to validate real business pain points and define the platform’s core features.
+
+• Designed the product roadmap, system architecture, and early prototype, leading the full lifecycle from market validation to technical execution.
+
+• Built and presented the prototype that won 1st place at Falling Walls Jordan 2025 among 50+ competing innovators.
+
+• Represented Jordan at the Falling Walls Global Finals in Berlin, selected among the Top 100 global innovators from 2,700+ applicants worldwide.
+
+Falling Walls Foundation | Ambassador – Jordan | Apr 2026 – Present
+
+• Invited to speak during the Amman and Ramallah events, sharing personal experience as a previous Falling Walls winner and global finalist.
+
+• Mentoring participants during the program by providing guidance on pitching, idea development, and innovation presentation.
+
+Freelance Full-Stack Developer | Feb 2025 – Present
+
+• Delivered 9+ full-stack web applications for small business clients, translating unclear business requirements into production-ready systems with responsive interfaces, backend APIs, databases, and deployment workflows.
+
+• Designed project architectures, database schemas, API flows, admin dashboards, and authentication/user-management logic based on each client’s operational needs.
+
+• Managed the full delivery lifecycle from discovery calls, UI planning, and feature scoping to implementation, testing, deployment, client handover, and post-launch iteration.
+
+• Built and deployed client platforms using React, Next.js, Node.js, NestJS, PostgreSQL, Supabase, Tailwind CSS, Netlify, AWS, and GitHub-based workflows.
+
+GDG Amman | Technical Director | Aug 2025 – Present
+
+• Co-organizing technical workshops and hackathons for a community of 3,000+ members in the Amman tech ecosystem.
+
+• Engaging in community-driven projects to promote modern web and AI technologies.
+
+AgentX | Software Engineer | Nov 2025 – Feb 2026
+AgentX: https://www.agx-ai.com/
+
+• Built the official website for a Jordan-based startup using React.js and Tailwind CSS.
+
+• Delivered a responsive, production-ready UI aligned with business requirements.
+
+TEDx Tabarbour | Front-End Developer | Sep 2025 – Feb 2026
+TEDx Tabarbour: https://tedxtabarbour.com/
+
+• Building the official event platform using React and CSS to serve an expected audience of 500+ attendees.
+
+• Implemented automated CI/CD pipelines using GitHub Actions, reducing manual deployment time by 10 minutes per build.
+
+TEDxGJU — Full-Stack Developer & Technical Support | Nov 2025 (Two Weeks)
+
+• Developed a custom ticketing system that successfully processed more than 150 registrations in a high-traffic environment.
+
+• Provided real-time technical troubleshooting for check-in systems, ensuring zero delays during the event entry phase.
+
+EDUCATION
+
+German Jordanian University (GJU) – B.Sc. Computer Engineering; 2023 – present
+
+• Actively involved in innovation, entrepreneurship, and national competitions.
+
+PROJECTS
+
+VibeSafe – Open-Source Security Developer Tool | Founder & Maintainer | June 2026
+GitHub: https://github.com/talaljaber/vibesafe
+VS Code Marketplace: https://marketplace.visualstudio.com/items?itemName=TalalJaber.vibeguard-scanner
+
+• Built an open-source pre-deploy safety scanner for AI-built or “vibe-coded” applications, released as both a VS Code extension and CLI tool.
+
+• Designed a TypeScript monorepo with a reusable scanner core, shared type system, CLI package, and VS Code extension package.
+
+• Implemented rule-based static analysis detectors for hardcoded secrets, exposed frontend keys, missing authentication, missing validation, and insecure project configuration.
+
+• Published the tool through npm, VS Code Marketplace, and Open VSX, with developer-focused repair plans, deploy-readiness scoring, and AI-ready fix prompts.
+
+HydroSense Jordan – Team Leader & ML Developer | April 2026 – May 2026
+
+• IoT-based water monitoring solution focused on cost-effective sensing, data processing, and real-time analysis.
+
+• Designed a shared hub architecture to reduce hardware costs and improve scalability across multiple sensing units.
+
+• Working on the machine learning model and signal processing pipeline to improve data interpretation, sensor reliability, and water-quality insight generation.
+
+Haitham Haddad Barbershop Platform (In Progress) – Full-Stack Developer | 2026
+Demo: https://haithamhaddad.netlify.app/
+
+• Developing a full-stack appointment platform for a local barbershop in Jordan using Next.js and Tailwind CSS.
+
+• Implementing backend logic with Next.js API routes and PostgreSQL for booking management and data persistence.
+
+• Designing a responsive, production-ready interface optimized for mobile users.
+
+GJU Solar Energy Visualization – Algorithm & Dashboard Developer | Feb 2026 – April 2026
+
+• Developing a real-time visualization dashboard for solar panel energy generation and estimated CO₂ savings at the German Jordanian University.
+
+• Implementing the algorithms required to calculate generated power and saved CO₂ in real time based on solar panel data.
+
+MedModelle E-Commerce – Full-Stack Developer | Mar 2026 – Apr 2026
+MedModelle: https://medmodelle.com/
+
+• Delivered a complete e-commerce website for a Jordan-based client, handling the full development lifecycle from frontend and backend implementation to database design and deployment.
+
+• Built the platform using Next.js, NestJS, and PostgreSQL, including product management, database structure, API development, and production deployment.
+
+• Managed the project end-to-end, translating client requirements into a functional, scalable, and production-ready online store.
+
+Human Activity Recognition System – ML & Full-Stack Developer | 2026
+GitHub: https://github.com/layandar/signals-and-systems
+
+• Built a full-stack Human Activity Recognition system that classifies human activities from accelerometer and gyroscope IMU sensor data using a trained SVM model.
+
+• Implemented a FastAPI backend with a signal processing pipeline for filtering, window segmentation, feature extraction, normalization, and activity prediction.
+
+• Developed a React and Tailwind CSS dashboard with drag-and-drop file upload, real-time analysis, confidence scores, FFT visualizations, and responsive results pages.
+
+Driver Monitoring System | Python, MediaPipe, OpenCV | Dec 2025
+GitHub: https://github.com/Talaljaber/driving-monitor
+
+• Developed a real-time safety application using Python and MediaPipe to monitor driver alertness and prevent accidents by detecting fatigue and distraction.
+
+• Implemented signal processing to track Eye Aspect Ratio (EAR), Mouth Aspect Ratio (MAR), and Head Pose Estimation for high-accuracy drowsiness and yawn detection.
+
+OneSalt E-Commerce – Full-Stack Developer | July–Aug 2025
+OneSalt: https://wearonesalt.com/
+
+• Delivered a complete e-commerce website for a Jordan-based client, handling the full development lifecycle from frontend and backend implementation to database design and deployment.
+
+• Built the platform using React.js, Node JS, and PostgreSQL, including product management, database structure, API development, and production deployment.
+
+• Managed the project end-to-end, translating client requirements into a functional, scalable, and production-ready online store.
+
+COMPETITIONS & ACHIEVEMENTS
+
+• Speaker & Finalist – Falling Walls Breakthrough of the Year (Berlin); recognized as one of the top 100 global innovators selected from 2,750+ applicants across 60 countries.
+Video: https://youtu.be/W_XHHXGQXUU?si=kkI77aUbOK--qNJf
+
+• Speaker & University Representative – Eighth Arab Youth Conference; nominated to present the success story of the DineLink startup and its international competition victory.
+
+• The youngest finalist at the Falling Walls Finals, pitching the DineLink startup alongside international professors, PhD holders, and researchers.
+
+• Winner – Falling Walls Lab Jordan 2025 (DAAD); secured 1st place nationally to represent Jordan on the global stage in Berlin.
+Link: https://tti-jo.org/tti-empowers-innovators-at-falling-walls-lab-jordan
+
+• Winner – The Business Game (TTi); received mentorship program with Ecoventure.
+
+• Finalist – National Technology Parade (HTU).
+
+• Finalist – Queen Rania National Entrepreneurship Competition (PSUT); completed 49 hours of mentorship training with QRCE.
+
+• Finalist – GJU 3030 Innovation Competition (GJU).
+
+• Participant – Database Hero (HTU).
+
+• Participant – AI Innovators Hackathon (UOP).
+
+• Participant – Application Development Hackathon (GJU).
+
+• PwC Mentorship Program mentee.
+
+• GJU Incubation Program participant.
+
+• Cyber Warriors Training, NCSC – intensive cybersecurity training program.
+
+• Hands on Apex (GJU) – Accelerated Web Application Development.
+
+CERTIFICATES
+
+• Oracle Apex – GJU. 2025
+
+• Git & GitHub – GJU IT Club. 2025
+
+• Front-End Development – GJU IT Club. 2025
+
+• Object-Oriented Programming – GJU. 2024
+
+• Code for Palestine – Paltel. 2020
+
+• Problem Solving – Paltel. 2020
+
+• C++ Programming – Paltel. 2020
+
+• ICDL – Galaxy Academy. 2018
+
+• Leadership Development – Bsharat Academy. 2018
+
+LANGUAGES
+
+• Arabic (native)
+
+• English (fluent, C1 certified)
+
+• German (B1)

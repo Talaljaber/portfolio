@@ -49,6 +49,29 @@ export const projects = [
   },
 
   {
+    id: 'eltizamati',
+    title: 'Eltizamati – Fintech Mobile Application',
+    shortDescription:
+      'Bilingual fintech app for loans, Murabaha financing and credit cards — 5th place at the Rally Fintech Hackathon',
+    description:
+      'Led a bilingual fintech mobile application from initial idea to working product, owning product design, system architecture, technical planning, and implementation.',
+    points: [
+      'Led the project from initial idea to working product, owning product design, system architecture, technical planning, and implementation.',
+      'Built a bilingual React Native and TypeScript application with clean architecture, Supabase, secure financial-data handling, offline demo mode, and a decimal-safe financial engine.',
+      'Delivered features for tracking loans, Murabaha financing, and credit cards, helping the team secure 5th place at the Rally Fintech Hackathon.',
+    ],
+    technologies: ['React Native', 'TypeScript', 'Supabase', 'Clean Architecture'],
+    category: 'Fintech / Mobile',
+    status: 'Completed',
+    year: 'Jul 2026',
+    role: 'Product & Technical Lead',
+    link: null,
+    repo: 'https://github.com/talaljaber/eltizamati',
+    featured: true,
+    priority: 3,
+  },
+
+  {
     id: 'medmodelle',
     title: 'MedModelle – E-Commerce Platform',
     shortDescription: 'Full-stack e-commerce website for a Jordan-based medical models client',
@@ -66,7 +89,7 @@ export const projects = [
     link: 'https://medmodelle.com',
     repo: null,
     featured: true,
-    priority: 3,
+    priority: 4,
   },
 
   {
@@ -87,7 +110,7 @@ export const projects = [
     link: 'https://wearonesalt.com',
     repo: null,
     featured: true,
-    priority: 4,
+    priority: 5,
   },
 
   {
@@ -108,7 +131,7 @@ export const projects = [
     link: null,
     repo: null,
     featured: true,
-    priority: 5,
+    priority: 6,
   },
 
   {
@@ -128,8 +151,8 @@ export const projects = [
     role: 'ML & Full-Stack Developer',
     link: null,
     repo: 'https://github.com/layandar/signals-and-systems',
-    featured: false,
-    priority: 6,
+    featured: true,
+    priority: 7,
   },
 
   {
@@ -149,7 +172,7 @@ export const projects = [
     link: null,
     repo: 'https://github.com/Talaljaber/driving-monitor',
     featured: false,
-    priority: 7,
+    priority: 8,
   },
 
   {
@@ -170,7 +193,7 @@ export const projects = [
     link: 'https://haithamhaddad.netlify.app/',
     repo: null,
     featured: false,
-    priority: 8,
+    priority: 9,
   },
 
   {
@@ -190,7 +213,7 @@ export const projects = [
     link: null,
     repo: null,
     featured: false,
-    priority: 9,
+    priority: 10,
   },
 
   {
@@ -208,7 +231,7 @@ export const projects = [
     link: 'https://justcook1.netlify.app',
     repo: null,
     featured: false,
-    priority: 10,
+    priority: 11,
   },
 ]
 

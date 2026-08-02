@@ -2,18 +2,337 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ---------------------------------------------------------------- tokens */
+
+:root {
+  --bg: #05060a;
+  --bg-raised: #0a0d16;
+  --surface: rgba(18, 22, 36, 0.55);
+
+  --ink: #e8ecf7;
+  --text: #a8b2c9;
+  --muted: #6b7690;
+  --faint: #3a4258;
+
+  --line: rgba(120, 140, 190, 0.14);
+  --line-strong: rgba(140, 160, 210, 0.28);
+
+  --accent: #6366f1;
+  --accent-bright: #818cf8;
+  --accent-glow: #a5b4fc;
+  --cyan: #22d3ee;
+
+  --font-ui: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  /* The rail is the one element pinned for the whole scroll, so its width is
+     a layout constant rather than a per-section decision. */
+  --rail-w: 48px;
+  --gutter: clamp(1.25rem, 4vw, 4rem);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Anchored sections must clear the fixed nav. */
+  [id] {
+    scroll-margin-top: 6rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-ui);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent-bright);
+    outline-offset: 3px;
+  }
+}
+
 @layer components {
-  /* Interface controls. Deliberately quiet — these are the only elements on
-     the site set in the sans face. */
+  /* ------------------------------------------------------------ typography */
+
+  .u-display {
+    font-family: var(--font-ui);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.02;
+    color: var(--ink);
+  }
+
+  .u-heading {
+    font-family: var(--font-ui);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.12;
+    color: var(--ink);
+  }
+
+  .u-body {
+    font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+    line-height: 1.65;
+    color: var(--text);
+    max-width: 65ch;
+  }
+
+  /* Mono, uppercase, wide — every technical label on the site. */
+  .u-kicker {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .u-mono {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .u-numeral {
+    font-family: var(--font-mono);
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+  }
+
+  /* --------------------------------------------------------------- controls */
+
   .btn-primary {
-    @apply inline-flex items-center gap-2 border border-[var(--accent)] bg-[var(--accent)] px-5 py-2.5 font-ui text-[0.72rem] font-medium uppercase tracking-[0.16em] text-[var(--paper)] transition-colors duration-200 hover:bg-[var(--accent-strong)] hover:border-[var(--accent-strong)];
+    @apply inline-flex items-center gap-2 px-6 py-3 font-mono text-[0.7rem] uppercase tracking-[0.16em] transition-colors duration-200;
+    background: var(--accent);
+    color: #fff;
+    border: 1px solid var(--accent);
+    box-shadow: 0 0 24px -6px var(--accent);
+  }
+
+  .btn-primary:hover {
+    background: var(--accent-bright);
+    border-color: var(--accent-bright);
   }
 
   .btn-secondary {
-    @apply inline-flex items-center gap-2 border border-[var(--rule-strong)] bg-transparent px-5 py-2.5 font-ui text-[0.72rem] font-medium uppercase tracking-[0.16em] text-[var(--ink)] transition-colors duration-200 hover:border-[var(--accent)] hover:text-[var(--accent)];
+    @apply inline-flex items-center gap-2 px-6 py-3 font-mono text-[0.7rem] uppercase tracking-[0.16em] transition-colors duration-200;
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--line-strong);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent-bright);
   }
 
   .btn-ghost {
-    @apply inline-flex items-center gap-1.5 font-ui text-[0.68rem] font-medium uppercase tracking-[0.16em] text-[var(--muted)] transition-colors duration-200 hover:text-[var(--accent)];
+    @apply inline-flex items-center gap-1.5 font-mono text-[0.68rem] uppercase tracking-[0.16em] transition-colors duration-200;
+    color: var(--muted);
+  }
+
+  .btn-ghost:hover {
+    color: var(--accent-bright);
+  }
+
+  /* ---------------------------------------------------------- lab surfaces */
+
+  /* Translucent, hairline-bordered, never opaque: panels must read as glass
+     sitting inside the environment, not as boxes pasted over it. */
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    position: relative;
+  }
+
+  .panel:hover {
+    border-color: var(--line-strong);
+  }
+
+  /* Corner brackets instead of a closed rectangle — the technical read
+     without drawing a box, which the continuous environment forbids. */
+  .bracket::before,
+  .bracket::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-color: var(--line-strong);
+    border-style: solid;
+    pointer-events: none;
+  }
+
+  .bracket::before {
+    top: -1px;
+    left: -1px;
+    border-width: 1px 0 0 1px;
+  }
+
+  .bracket::after {
+    bottom: -1px;
+    right: -1px;
+    border-width: 0 1px 1px 0;
+  }
+
+  /* ------------------------------------------------- schematic plates */
+
+  /* Line art reads as a drawing only if the weights stay separated: the
+     mechanism sits at full strength, the frame and grid stay near-invisible. */
+  .glyph {
+    color: var(--accent-bright);
+    opacity: 0.55;
+    transition: opacity 0.35s ease, color 0.35s ease;
+  }
+
+  .group:hover .glyph,
+  a:hover .glyph {
+    opacity: 0.95;
+    color: var(--accent-glow);
+  }
+
+  .glyph .glyph-faint {
+    opacity: 0.35;
+  }
+
+  .glyph .glyph-fill {
+    fill: currentColor;
+    stroke: none;
+  }
+
+  .glyph .glyph-trace {
+    stroke-width: 1.4;
+  }
+
+  /* Slow enough to be noticed only if you look — machinery ticking over,
+     not an animation demanding attention. */
+  .glyph .glyph-spin {
+    transform-origin: 60px 60px;
+    animation: glyph-rotate 34s linear infinite;
+  }
+
+  .glyph .glyph-spin-slow {
+    animation: glyph-rotate 52s linear infinite reverse;
+  }
+
+  @keyframes glyph-rotate {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* Blueprint field behind a card. Fades out so it never becomes a rectangle. */
+  .blueprint {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(to right, rgba(120, 140, 190, 0.07) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(120, 140, 190, 0.07) 1px, transparent 1px);
+    background-size: 28px 28px;
+    -webkit-mask-image: radial-gradient(120% 100% at 100% 0%, #000 0%, transparent 72%);
+    mask-image: radial-gradient(120% 100% at 100% 0%, #000 0%, transparent 72%);
+  }
+
+  .hairline {
+    height: 1px;
+    border: 0;
+    background: var(--line);
+  }
+
+  .u-link {
+    color: var(--accent-bright);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+
+  .u-link:hover {
+    border-bottom-color: var(--accent-bright);
+  }
+
+  .skip-link {
+    @apply sr-only;
+  }
+
+  .skip-link:focus {
+    @apply not-sr-only fixed left-4 top-4 z-[100] px-4 py-2 font-mono text-xs;
+    background: var(--accent);
+    color: #fff;
+  }
+
+  /* ------------------------------------------------------------- structure */
+
+  .shell {
+    max-width: 1440px;
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  @media (min-width: 1024px) {
+    .shell {
+      padding-left: calc(var(--rail-w) + var(--gutter));
+    }
+  }
+
+  /**
+   * Every content area occupies at least one full viewport and starts at the
+   * top of it. `svh` rather than `vh` so mobile browser chrome collapsing does
+   * not leave the hero cut off.
+   *
+   * min-height, not height: an area with more content than fits grows past one
+   * screen rather than clipping.
+   *
+   * Deliberately no scroll-snap. Snapping — even `proximity` — moves the
+   * viewport on its own after the user stops scrolling, which reads as the page
+   * taking control away from them.
+   */
+  .section,
+  .section-screen {
+    position: relative;
+    min-height: 100svh;
+  }
+
+  .section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* The screen height now carries the rhythm, so the old block padding would
+       only push content off the bottom. */
+    padding-block: clamp(5rem, 9vh, 7rem);
+  }
+
+  /* Sub-routes (a case study, the services list) are documents, not stops on
+     the main scroll: they start at the top and take the height they need. */
+  .section-page {
+    position: relative;
+    padding-block: clamp(3rem, 6vh, 5rem);
   }
 }

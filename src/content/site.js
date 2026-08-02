@@ -32,6 +32,6 @@ export const siteConfig = {
     description: 'Talal Jaber (@talaljaberr) is a Software Engineer, Computer Engineering student at German Jordanian University (GJU), Founder & CTO of DineLink, and Top 100 global innovator at Falling Walls Foundation Berlin. Full-stack developer based in Amman, Jordan.',
     keywords: 'Talal Jaber, talaljaberr, @talaljaberr, talal jaber german jordanian university, talal jaber gju, software engineer, full-stack developer, DineLink, Falling Walls, React, Next.js, Jordan',
     url: 'https://talalportfolio.netlify.app',
-    image: '/og-image.png'
+    image: '/images/og-image.png'
   }
 }

@@ -1,173 +1,68 @@
-// Skill taxonomy, transcribed verbatim from the CV.
+// Skills, narrowed to what a software engineering role actually asks for.
+// The previous taxonomy carried ~90 entries across three tiers, including
+// process vocabulary ("MVP scoping", "requirement analysis") that read as
+// padding next to the concrete technologies. Nothing invented was added.
 
-export const skillTiers = [
+export const skillGroups = [
   {
-    id: 'main',
-    title: 'Main Technical Focus',
-    groups: [
-      {
-        label: 'Product & System Design',
-        items: [
-          'product discovery',
-          'customer interviews',
-          'requirement analysis',
-          'MVP scoping',
-          'feature prioritization',
-          'technical roadmapping',
-          'system architecture',
-          'backend architecture',
-          'database design',
-          'relational data modeling',
-          'API design',
-          'API integration',
-          'full-stack architecture',
-        ],
-      },
-      {
-        label: 'Full-Stack Web Development',
-        items: [
-          'Next.js',
-          'React.js',
-          'TypeScript',
-          'JavaScript',
-          'Node.js',
-          'NestJS',
-          'FastAPI',
-          'REST APIs',
-          'PostgreSQL',
-          'MySQL',
-          'Supabase',
-          'authentication flows',
-          'backend validation',
-          'real-time data handling',
-          'dashboard development',
-          'responsive UI development',
-        ],
-      },
-      {
-        label: 'Developer Tools & Secure Development',
-        items: [
-          'VS Code Extension API',
-          'CLI development',
-          'TypeScript monorepos',
-          'static analysis',
-          'rule-based security detectors',
-          'secret scanning',
-          'frontend key exposure detection',
-          'secure endpoint awareness',
-          'environment-variable safety',
-          'input validation awareness',
-          'open-source workflows',
-        ],
-      },
-      {
-        label: 'AI-Assisted Engineering',
-        items: [
-          'LLMs and AI coding tools for prototyping',
-          'debugging',
-          'refactoring',
-          'documentation',
-          'architecture exploration',
-          'faster product iteration',
-        ],
-      },
+    id: 'languages',
+    label: 'Languages',
+    items: ['TypeScript', 'JavaScript', 'Python', 'Java', 'SQL', 'C', 'C++'],
+  },
+  {
+    id: 'frontend',
+    label: 'Frontend',
+    items: ['React', 'Next.js', 'React Native', 'Tailwind CSS', 'Responsive web development'],
+  },
+  {
+    id: 'backend',
+    label: 'Backend',
+    items: ['Node.js', 'NestJS', 'FastAPI', 'Next.js API routes', 'REST APIs'],
+  },
+  {
+    id: 'databases',
+    label: 'Databases',
+    items: ['PostgreSQL', 'MySQL', 'Supabase', 'Relational data modelling'],
+  },
+  {
+    id: 'engineering',
+    label: 'Software Engineering',
+    items: [
+      'Object-Oriented Programming',
+      'Data Structures',
+      'Algorithms',
+      'Clean code',
+      'Modular architecture',
+      'Software design patterns',
+      'System design',
+      'API design',
+      'Database design',
+      'Testing',
+      'Debugging',
+      'Authentication',
+      'Authorization',
+      'Input validation',
     ],
   },
   {
-    id: 'applied',
-    title: 'Applied Technical Knowledge',
-    groups: [
-      {
-        label: 'AI, ML & Data',
-        items: [
-          'machine learning applications',
-          'SVM classification',
-          'feature extraction',
-          'FFT analysis',
-          'filtering',
-          'window segmentation',
-          'normalization',
-          'signal processing pipelines',
-          'IMU sensor-data processing',
-          'activity recognition',
-          'MediaPipe',
-          'OpenCV',
-          'real-time landmark detection',
-        ],
-      },
-      {
-        label: 'DevOps & Deployment',
-        items: [
-          'Git/GitHub',
-          'GitHub Actions',
-          'Docker',
-          'Netlify',
-          'AWS',
-          'Hetzner',
-          'Linux',
-          'CI/CD pipeline management',
-          'production deployment workflows',
-          'npm package publishing',
-          'VS Code Marketplace publishing',
-          'Open VSX publishing',
-        ],
-      },
-      {
-        label: 'Networking & Systems',
-        items: [
-          'HTTP/HTTPS',
-          'DNS',
-          'TCP',
-          'UDP',
-          'WebSockets',
-          'foundational network architecture',
-          'Linux basics',
-          'distributed systems communication',
-        ],
-      },
-    ],
+    id: 'tooling',
+    label: 'Tools & Deployment',
+    items: ['Git', 'GitHub', 'GitHub Actions', 'Docker', 'AWS', 'Netlify', 'Linux'],
   },
   {
-    id: 'foundations',
-    title: 'Programming & CS Foundations',
-    groups: [
-      {
-        label: 'Languages',
-        items: ['TypeScript', 'JavaScript', 'Python', 'Java', 'C', 'C++', 'SQL', 'x86 Assembly'],
-      },
-      {
-        label: 'Fundamentals',
-        items: [
-          'Object-Oriented Programming',
-          'Data Structures',
-          'Algorithms',
-          'clean code principles',
-          'modular architecture',
-          'testing',
-          'debugging',
-          'software design patterns',
-        ],
-      },
-      {
-        label: 'Working Knowledge',
-        items: [
-          'Kubernetes basics',
-          'Vue.js',
-          'Vite',
-          'Oracle APEX',
-          'CI/CD optimization',
-          'containerization concepts',
-          'cloud infrastructure basics',
-          'cybersecurity testing fundamentals',
-          'German B1',
-        ],
-      },
+    id: 'additional',
+    label: 'Additional',
+    items: [
+      'VS Code Extension API',
+      'CLI development',
+      'Static analysis',
+      'OpenCV',
+      'MediaPipe',
+      'SVM classification',
+      'Signal processing',
     ],
   },
 ]
-
-/** Flat list of every group, for the pages that do not split by tier. */
-export const skillGroups = skillTiers.flatMap((tier) => tier.groups)
 
 export const languages = [
   { name: 'Arabic', level: 'Native' },

@@ -1,28 +1,28 @@
 import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
-import BookShell from './components/book/BookShell'
+import Home from './routes/Home'
+import Services from './routes/Services'
 import ProjectDetail from './routes/ProjectDetail'
 
 /**
- * The book is the site. The old section routes are kept as redirects into the
- * matching chapter so existing links and bookmarks still resolve, and the
- * project-detail route stays a page of its own.
+ * One continuous page at the root, plus two routes of their own. The legacy
+ * section paths still resolve — now onto real scroll anchors rather than
+ * chapter indices.
  */
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<BookShell />} />
+      <Route path="/" element={<Home />} />
+      <Route path="/services" element={<Services />} />
       <Route path="/projects/:id" element={<ProjectDetail />} />
 
       <Route path="/about" element={<Navigate to={{ pathname: '/', hash: '#about' }} replace />} />
+      <Route path="/projects" element={<Navigate to={{ pathname: '/', hash: '#work' }} replace />} />
+      <Route path="/skills" element={<Navigate to={{ pathname: '/', hash: '#skills' }} replace />} />
       <Route
-        path="/projects"
-        element={<Navigate to={{ pathname: '/', hash: '#projects' }} replace />}
-      />
-      <Route
-        path="/services"
-        element={<Navigate to={{ pathname: '/', hash: '#services' }} replace />}
+        path="/experience"
+        element={<Navigate to={{ pathname: '/', hash: '#experience' }} replace />}
       />
       <Route
         path="/achievements"

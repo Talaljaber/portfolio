@@ -67,7 +67,8 @@ export const experience = [
     role: 'Front-End Developer',
     org: 'TEDx Tabarbour',
     period: 'Sep 2025 – Feb 2026',
-    link: 'https://tedxtabarbour.com/',
+    // Site is down; the role stays, the dead link goes.
+    link: null,
     points: [
       'Building the official event platform using React and CSS to serve an expected audience of 500+ attendees.',
       'Implemented automated CI/CD pipelines using GitHub Actions, reducing manual deployment time by 10 minutes per build.',
