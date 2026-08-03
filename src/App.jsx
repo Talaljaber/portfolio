@@ -1,6 +1,7 @@
 import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
+import { useSeo } from './hooks/useSeo'
 import Home from './routes/Home'
 import Services from './routes/Services'
 import ProjectDetail from './routes/ProjectDetail'
@@ -11,6 +12,8 @@ import ProjectDetail from './routes/ProjectDetail'
  * chapter indices.
  */
 function App() {
+  useSeo()
+
   return (
     <Routes>
       <Route path="/" element={<Home />} />
